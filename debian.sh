@@ -312,10 +312,10 @@ URL2="https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compres
 URL3="https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
 URL4="https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-only/hosts"
 
-rm -vrf /etc/hosts-hagezi*
+rm -vrf /etc/hosts-filter*
 
 ### ULTIMATE
-wget --inet4-only --https-only --show-progress --quiet "$URL1" -O /etc/hosts-hagezi-ultimate
+wget --inet4-only --https-only --show-progress --quiet "$URL1" -O /etc/hosts-filter-hagezi-ultimate
 if [ $? -eq 0 ]; then
     echo -e "\e[32m ✅ Hagezi Ultimate hosts file downloaded! \e[0m"
 else
@@ -324,7 +324,7 @@ else
 fi
 
 ### DOH
-wget --inet4-only --https-only --show-progress --quiet "$URL2" -O /etc/hosts-hagezi-doh
+wget --inet4-only --https-only --show-progress --quiet "$URL2" -O /etc/hosts-filter-hagezi-doh
 if [ $? -eq 0 ]; then
     echo -e "\e[32m ✅ Hagezi DOH hosts file downloaded! \e[0m"
 else
@@ -333,7 +333,7 @@ else
 fi
 
 ### TIF
-wget --inet4-only --https-only --show-progress --quiet "$URL3" -O /etc/hosts-hagezi-tif
+wget --inet4-only --https-only --show-progress --quiet "$URL3" -O /etc/hosts-filter-hagezi-tif
 if [ $? -eq 0 ]; then
     echo -e "\e[32m ✅ Hagezi TIF hosts file downloaded! \e[0m"
 else
@@ -341,14 +341,24 @@ else
     exit 1
 fi
 
-cat /etc/hosts-hagezi-ultimate > /etc/hosts-hagezi-all
-cat /etc/hosts-hagezi-doh >> /etc/hosts-hagezi-all
-cat /etc/hosts-hagezi-tif >> /etc/hosts-hagezi-all
+### FAKENEWS AND GAMBLING
+wget --inet4-only --https-only --show-progress --quiet "$URL4" -O /etc/hosts-filter-fakenews-gambling
+if [ $? -eq 0 ]; then
+    echo -e "\e[32m ✅ Steven Black Fakenews Gambling hosts file downloaded! \e[0m"
+else
+    echo -e "\e[31m ❌ Error: "$URL4". \e[0m"
+    exit 1
+fi
+
+cat /etc/hosts-filter-hagezi-ultimate > /etc/hosts-filter-all
+cat /etc/hosts-filter-hagezi-doh >> /etc/hosts-filter-all
+cat /etc/hosts-filter-hagezi-tif >> /etc/hosts-filter-all
+cat /etc/hosts-filter-fakenews-gambling >> /etc/hosts-filter-all
 
 cp -v /etc/hosts.noipv6.bak /etc/hosts
-cat /etc/hosts-hagezi-all >> /etc/hosts
+cat /etc/hosts-filter-all >> /etc/hosts
 
-rm -vrf /etc/hosts-hagezi*
+rm -vrf /etc/hosts-filter*
 
 echo -e "\e[32m ✅ Archivo /etc/hosts bloqueando todo lo malo !!! \e[0m"
 EOF
