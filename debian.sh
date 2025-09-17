@@ -324,59 +324,49 @@ EOF
 	cat <<"EOF" > /usr/bin/make-hosts-block-ads
 #!/bin/bash
 
-URL1="https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling/hosts"
-URL2="https://someonewhocares.org/hosts/zero/hosts"
+URL1="https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/ultimate-compressed.txt"
+URL2="https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compressed.txt"
 URL3="https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
 
-rm -vrf /etc/hosts-filter*
+rm -vrf /etc/hosts-hagezi*
 
-### STEVEN BLACK
-touch /etc/hosts-filter-steven-black-noipv6
-wget --inet4-only --https-only --show-progress --quiet "$URL1" -O /etc/hosts-filter-steven-black-noipv6
+### ULTIMATE
+wget --inet4-only --https-only --show-progress --quiet "$URL1" -O /etc/hosts-hagezi-ultimate
 if [ $? -eq 0 ]; then
-    echo -e "\e[32m ✅ Steven Black Unified hosts = (adware + malware) Plus "fakenews + gambling" downloaded! \e[0m"
-    sed -i.bak '/::/d' /etc/hosts-filter-steven-black-noipv6
+    echo -e "\e[32m ✅ Hagezi Ultimate hosts file downloaded! \e[0m"
 else
-    echo -e "\e[31m ❌ Error: Steven Black url hosts file not found. \e[0m"
+    echo -e "\e[31m ❌ Error: "$URL1". \e[0m"
     exit 1
 fi
-### DAN POLLOCK
-touch /etc/hosts-filter-dan-pollock-noipv6
-wget --inet4-only --https-only --show-progress --quiet "$URL2" -O /etc/hosts-filter-dan-pollock-noipv6
+
+### DOH
+wget --inet4-only --https-only --show-progress --quiet "$URL2" -O /etc/hosts-hagezi-doh
 if [ $? -eq 0 ]; then
-    echo -e "\e[32m ✅ Dan Pollock hosts file downloaded! \e[0m"
-    sed -i.bak '/::/d' /etc/hosts-filter-dan-pollock-noipv6
+    echo -e "\e[32m ✅ Hagezi DOH hosts file downloaded! \e[0m"
 else
-    echo -e "\e[31m ❌ Error: Dan Pollock hosts file not found. \e[0m"
+    echo -e "\e[31m ❌ Error: "$URL2". \e[0m"
     exit 1
 fi
-### HAGEZI TIF
-touch /etc/hosts-filter-hagezi-tif-noipv6
-wget --inet4-only --https-only --show-progress --quiet "$URL3" -O /etc/hosts-filter-hagezi-tif-noipv6
+
+### TIF
+wget --inet4-only --https-only --show-progress --quiet "$URL3" -O /etc/hosts-hagezi-tif
 if [ $? -eq 0 ]; then
     echo -e "\e[32m ✅ Hagezi TIF hosts file downloaded! \e[0m"
-    sed -i.bak '/::/d' /etc/hosts-filter-hagezi-tif-noipv6
 else
-    echo -e "\e[31m ❌ Error: Hagezi TIF hosts file not found. \e[0m"
+    echo -e "\e[31m ❌ Error: "$URL3". \e[0m"
     exit 1
 fi
 
-cat /etc/hosts-filter-steven-black-noipv6 > /etc/hosts-filter-adblocker-noipv6
-cat /etc/hosts-filter-dan-pollock-noipv6 >> /etc/hosts-filter-adblocker-noipv6
-cat /etc/hosts-filter-hagezi-tif-noipv6 >> /etc/hosts-filter-adblocker-noipv6
+cat /etc/hosts-hagezi-ultimate > /etc/hosts-hagezi-all
+cat /etc/hosts-hagezi-doh >> /etc/hosts-hagezi-all
+cat /etc/hosts-hagezi-tif >> /etc/hosts-hagezi-all
 
-sed -i -e 's/web.facebook.com/0.0.0.0/g' /etc/hosts-filter-adblocker-noipv6
-sed -i -e 's/crash.steampowered.com/0.0.0.0/g' /etc/hosts-filter-adblocker-noipv6
-sed -i -e 's/click.discord.com/0.0.0.0/g' /etc/hosts-filter-adblocker-noipv6
-
-awk '!seen[$0]++' /etc/hosts-filter-adblocker-noipv6 > /etc/hosts-filter-definitive
-chattr -i /etc/hosts
 cp -v /etc/hosts.noipv6.bak /etc/hosts
-cat /etc/hosts-filter-definitive >> /etc/hosts
+cat /etc/hosts-hagezi-all >> /etc/hosts
 
-rm -vrf /etc/hosts-filter*
+rm -vrf /etc/hosts-hagezi*
 
-echo -e "\e[32m ✅ Archivo /etc/hosts bloqueando ads malware y más con éxito !!! \e[0m"
+echo -e "\e[32m ✅ Archivo /etc/hosts bloqueando todo lo malo !!! \e[0m"
 EOF
 
 	chmod +x /usr/bin/make-hosts-block-ads
