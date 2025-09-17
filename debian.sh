@@ -303,23 +303,6 @@ restrict 127.0.0.1
 EOF
 	systemctl restart ntpsec.service
 
- 	### LOCAL DNS SERVER
-	apt install -y dnsmasq
-	systemctl stop dnsmasq.service
-	cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf.bak
-	cat <<"EOF" > /etc/dnsmasq.conf
-port=53
-#domain-needed
-bogus-priv
-resolv-file=/etc/resolv.conf
-strict-order
-interface=enp3s0
-no-dhcp-interface=enp3s0
-bind-interfaces
-cache-size=0
-EOF
-	systemctl restart dnsmasq.service
-
 	### BLOCKING ADS TRACKERS MALWARE SPYWARE TELEMETRY CRYPTOMINING BY HOSTS FILE DIRECTLY
 	cat <<"EOF" > /usr/bin/make-hosts-block-ads
 #!/bin/bash
@@ -524,6 +507,23 @@ fi
 EOF
 	chmod +x /usr/bin/installer-ffmpeg-master
 	bash /usr/bin/installer-ffmpeg-master
+
+ 	### LOCAL DNS SERVER
+	apt install -y dnsmasq
+	systemctl stop dnsmasq.service
+	cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf.bak
+	cat <<"EOF" > /etc/dnsmasq.conf
+port=53
+#domain-needed
+bogus-priv
+resolv-file=/etc/resolv.conf
+strict-order
+interface=enp3s0
+no-dhcp-interface=enp3s0
+bind-interfaces
+cache-size=0
+EOF
+	systemctl restart dnsmasq.service
 
 	### OLLAMA
 	curl -fsSL https://ollama.com/install.sh | sh
