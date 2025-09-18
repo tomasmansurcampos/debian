@@ -20,6 +20,7 @@ _nix()
 	nix-env -iA nixpkgs.nmap
  	nix-env -iA nixpkgs.fastfetch
   	nix-env -iA nixpkgs.putty
+   	nix-env -iA nixpkgs.wireshark
    	nix-env -iA nixpkgs.vscode
  	nix-env -iA nixpkgs.bleachbit
   	nix-env -iA nixpkgs.keepass
