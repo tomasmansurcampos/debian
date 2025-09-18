@@ -12,6 +12,12 @@ GNOME_THINGS="gnome-games* gnome-weather gnome-software-common gnome-boxes gnome
 
 OPENBOX="openbox menu obconf lightdm xfce4-terminal network-manager git kpcli nnn pcmanfm geany"
 
+nix_packages()
+{
+	nix-env -iA nixpkgs.nmap
+ 	nix-env -iA nixpkgs.ardour
+}
+
 _flatpak()
 {
 	#apt purge flatpak -y && rm -vrf /var/lib/flatpak/ && rm -vrf /home/*/.cache/flatpak/ && rm -vrf /home/*/.local/share/flatpak/ && rm -vrf /home/*/.var/app/* && rm -vrf /root/.local/share/flatpak/
