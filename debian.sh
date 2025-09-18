@@ -5,6 +5,7 @@ ESSENTIAL_PACKAGES="build-essential dnsutils kpcli man nano fwupd gnupg gcc gcc-
 PACKAGES="libreoffice ttf-mscorefonts-installer keepassxc keepass2 putty bleachbit gnome-disk-utility vlc audacity spek geany"
 
 UNWANTED_PACKAGES="firefox-esr firefox* synaptic smtube qps quassel meteo-qt audacious popularity-contest evolution qbittorrent quodlibet parole exfalso yelp seahorse totem cheese" #malcontent
+UNWANTED_GNOME_DE_PACKAGES="gnome-software gnome-games evolution transmission"
 
 INTEL_THINGS="intel-microcode iucode-tool *nvidia* firmware-intel* intel-media-va-driver-non-free"
 
