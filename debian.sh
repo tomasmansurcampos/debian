@@ -126,7 +126,8 @@ EOF
 
  	### NALA
   	curl https://gitlab.com/volian/volian-archive/-/raw/main/install-nala.sh | bash
-	
+   	/usr/bin/nala --install-completion bash
+
 	### CPU
 	if wget --inet4-only --https-only --quiet --spider "https://dl.xanmod.org/check_x86-64_psabi.sh"; then
 		wget --inet4-only --https-only https://dl.xanmod.org/check_x86-64_psabi.sh -O /usr/bin/check_x86-64_psabi
