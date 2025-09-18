@@ -21,6 +21,8 @@ _nix()
  	nix-env -iA nixpkgs.fastfetch
   	nix-env -iA nixpkgs.putty
  	nix-env -iA nixpkgs.bleachbit
+  	nix-env -iA nixpkgs.keepass
+   	nix-env -iA nixpkgs.keepassxc
    	nix-env -iA nixpkgs.ardour
 }
 
