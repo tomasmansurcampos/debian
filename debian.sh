@@ -123,6 +123,9 @@ EOF
 	### EMACS NOX NO EXIM4 SERVER
 	apt update
 	apt install --no-install-recommends -y emacs-nox
+
+ 	### NALA
+  	curl https://gitlab.com/volian/volian-archive/-/raw/main/install-nala.sh | bash
 	
 	### CPU
 	if wget --inet4-only --https-only --quiet --spider "https://dl.xanmod.org/check_x86-64_psabi.sh"; then
