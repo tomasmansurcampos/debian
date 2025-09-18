@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ESSENTIAL_PACKAGES="build-essential dnsutils kpcli man nano fwupd gnupg gcc gcc-doc nasm gdb python-is-python3 stubby curl wget screen minicom jq git make binutils tcpdump lynx nala lm-sensors fancontrol lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar ffmpeg flac sox libsox-fmt-all"
+ESSENTIAL_PACKAGES="build-essential dnsutils kpcli man nano fwupd gnupg gcc gcc-doc nasm gdb python-is-python3 stubby curl wget screen minicom jq git make binutils tcpdump lynx lm-sensors fancontrol lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar ffmpeg flac sox libsox-fmt-all"
 
 PACKAGES="libreoffice ttf-mscorefonts-installer keepassxc keepass2 putty bleachbit gnome-disk-utility vlc audacity spek geany"
 
@@ -125,10 +125,6 @@ EOF
 	### EMACS NOX NO EXIM4 SERVER
 	apt update
 	apt install --no-install-recommends -y emacs-nox
-
- 	### NALA
-  	curl https://gitlab.com/volian/volian-archive/-/raw/main/install-nala.sh | bash
-   	/usr/bin/nala --install-completion bash
 
 	### CPU
 	if wget --inet4-only --https-only --quiet --spider "https://dl.xanmod.org/check_x86-64_psabi.sh"; then
