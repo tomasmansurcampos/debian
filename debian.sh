@@ -119,6 +119,8 @@ EOF
 	### BASIC PACKAGES TO GET LETS START.
 	apt update
 	apt install --install-recommends -y $ESSENTIAL_PACKAGES
+ 	systemctl disable fwupd
+  	systemctl stop fwupd
 
 	### EMACS NOX NO EXIM4 SERVER
 	apt update
