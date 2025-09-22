@@ -26,6 +26,7 @@ _nix()
   	nix-env -iA nixpkgs.keepass
    	nix-env -iA nixpkgs.keepassxc
 	nix-env -iA nixpkgs.libreoffice-qt6-fresh
+ 	nix-env -iA nixpkgs.vlc
 	nix-env -iA nixpkgs.audacity
    	nix-env -iA nixpkgs.ardour
 }
