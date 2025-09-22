@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ESSENTIAL_PACKAGES="build-essential dnsutils kpcli man nano fwupd gnupg gcc gcc-doc nasm gdb python-is-python3 stubby curl wget screen minicom jq git make binutils tcpdump lynx lm-sensors fancontrol lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar ffmpeg flac sox libsox-fmt-all"
+ESSENTIAL_PACKAGES="build-essential dnsutils kpcli man nano fwupd gnupg gcc gcc-doc nasm gdb python-is-python3 stubby curl wget screen minicom jq git make binutils tcpdump lynx lm-sensors fancontrol lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar sox libsox-fmt-all"
 
 PACKAGES="gnome-disk-utility"
 
@@ -26,6 +26,7 @@ _nix()
   	nix-env -iA nixpkgs.keepass
    	nix-env -iA nixpkgs.keepassxc
 	nix-env -iA nixpkgs.libreoffice-qt6-fresh
+ 	nix-env -iA nixpkgs.ffmpeg-full
  	nix-env -iA nixpkgs.vlc
   	nix-env -iA nixpkgs.spek
 	nix-env -iA nixpkgs.audacity
