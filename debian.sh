@@ -2,7 +2,7 @@
 
 ESSENTIAL_PACKAGES="build-essential dnsutils kpcli man nano fwupd gnupg gcc gcc-doc nasm gdb python-is-python3 stubby curl wget screen minicom jq git make binutils tcpdump lynx lm-sensors fancontrol lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar sox libsox-fmt-all"
 
-PACKAGES="gnome-disk-utility"
+PACKAGES="gnome-disk-utility audacity spek ardour"
 
 UNWANTED_PACKAGES="firefox-esr firefox* synaptic smtube qps quassel meteo-qt audacious popularity-contest evolution qbittorrent quodlibet parole exfalso yelp seahorse totem cheese" #malcontent
 UNWANTED_GNOME_DE_PACKAGES="gnome-software gnome-games evolution transmission evolution-data-server gnome-calendar"
@@ -28,9 +28,9 @@ _nix()
 	nix-env -iA nixpkgs.libreoffice-qt6-fresh
  	nix-env -iA nixpkgs.ffmpeg-full
  	nix-env -iA nixpkgs.vlc
-  	nix-env -iA nixpkgs.spek
-	nix-env -iA nixpkgs.audacity
-   	nix-env -iA nixpkgs.ardour
+  	#nix-env -iA nixpkgs.spek
+	#nix-env -iA nixpkgs.audacity
+   	#nix-env -iA nixpkgs.ardour
 }
 
 _flatpak()
@@ -395,20 +395,6 @@ _debian_desktop()
 	### OFFICIAL DEBIAN PACKAGES
 	apt update
 	apt install --install-recommends -y $PACKAGES
-	
-	### LIQUORIX KERNEL
- 	### curl -s 'https://liquorix.net/install-liquorix.sh' | sudo bash
-	curl -s "https://liquorix.net/liquorix-keyring.gpg" | gpg --batch --yes --output /etc/apt/keyrings/liquorix-keyring.gpg --dearmor
-	chmod 0644 /etc/apt/keyrings/liquorix-keyring.gpg
-	cat <<EOF > /etc/apt/sources.list.d/liquorix.sources
-Types: deb deb-src
-URIs: https://liquorix.net/debian
-Suites: $(lsb_release -cs)
-Components: main
-Architectures: amd64
-Signed-By: /etc/apt/keyrings/liquorix-keyring.gpg
-EOF
-	#apt update && apt install --install-recommends -y linux-image-liquorix-amd64 linux-headers-liquorix-amd64
 
 	### TOR BROWSER
 	cat <<"EOF" > /usr/bin/installer-tor-browser
@@ -436,14 +422,14 @@ URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 FILE=$(basename "$URL")
 if wget --inet4-only --https-only --quiet --spider "$URL"; then
     wget --inet4-only --https-only --show-progress -q "$URL" -O "$FILE"
-    apt install -y "./$FILE"
+    apt install --install-recommends -y "./$FILE"
 	rm -vf "$FILE"
 else
     echo "Error $URL not found."
 fi
 EOF
 	chmod +x /usr/bin/installer-google-chrome
-	bash /usr/bin/installer-google-chrome
+	#bash /usr/bin/installer-google-chrome
 
  	### FIREFOX
 	#apt update && apt install --install-recommends -y firefox-esr
@@ -489,20 +475,6 @@ Architectures: amd64
 Signed-By: /usr/share/keyrings/oracle-virtualbox-2016.gpg
 EOF
 	apt update && apt install --install-recommends -y virtualbox-7.2 linux-headers-amd64 linux-headers-$(uname -r)
-
-	### VSCODE
-	wget --inet4-only -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-	install -D -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft.gpg
-	rm -vf microsoft.gpg
-	cat <<EOF > /etc/apt/sources.list.d/vscode.sources
-Types: deb
-URIs: https://packages.microsoft.com/repos/code
-Suites: stable
-Components: main
-Architectures: $(dpkg --print-architecture)
-Signed-By: /usr/share/keyrings/microsoft.gpg
-EOF
-	apt update && apt install -y code
 }
 
 _cookie_fortune()
@@ -521,6 +493,34 @@ EOF
 
 _other_configs_()
 {
+	### LIQUORIX KERNEL
+ 	### curl -s 'https://liquorix.net/install-liquorix.sh' | sudo bash
+	curl -s "https://liquorix.net/liquorix-keyring.gpg" | gpg --batch --yes --output /etc/apt/keyrings/liquorix-keyring.gpg --dearmor
+	chmod 0644 /etc/apt/keyrings/liquorix-keyring.gpg
+	cat <<EOF > /etc/apt/sources.list.d/liquorix.sources
+Types: deb deb-src
+URIs: https://liquorix.net/debian
+Suites: $(lsb_release -cs)
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/liquorix-keyring.gpg
+EOF
+	#apt update && apt install --install-recommends -y linux-image-liquorix-amd64 linux-headers-liquorix-amd64
+
+	### VSCODE
+	wget --inet4-only -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+	install -D -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft.gpg
+	rm -vf microsoft.gpg
+	cat <<EOF > /etc/apt/sources.list.d/vscode.sources
+Types: deb
+URIs: https://packages.microsoft.com/repos/code
+Suites: stable
+Components: main
+Architectures: $(dpkg --print-architecture)
+Signed-By: /usr/share/keyrings/microsoft.gpg
+EOF
+	apt update && apt install -y code
+
 	### FFMPEG
     cat <<"EOF" > /usr/bin/installer-ffmpeg-master
 #!/bin/bash
