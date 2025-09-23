@@ -18,6 +18,7 @@ _nix()
 	sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
 
 	nix-env -iA nixpkgs.nmap
+	nix-env -iA nixpkgs.zenmap
  	nix-env -iA nixpkgs.fastfetch
 	nix-env -iA nixpkgs.yt-dlp
   	nix-env -iA nixpkgs.putty
