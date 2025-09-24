@@ -417,22 +417,6 @@ EOF
 	chmod +x /usr/bin/installer-tor-browser
 	bash /usr/bin/installer-tor-browser
 
-	### GOOGLE CHROME
-	cat <<"EOF" > /usr/bin/installer-google-chrome
-#!/bin/bash
-URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-FILE=$(basename "$URL")
-if wget --inet4-only --https-only --quiet --spider "$URL"; then
-    wget --inet4-only --https-only --show-progress -q "$URL" -O "$FILE"
-    apt install --install-recommends -y "./$FILE"
-	rm -vf "$FILE"
-else
-    echo "Error $URL not found."
-fi
-EOF
-	chmod +x /usr/bin/installer-google-chrome
-	#bash /usr/bin/installer-google-chrome
-
  	### FIREFOX
 	#apt update && apt install --install-recommends -y firefox-esr
 	apt purge -y firefox* && rm -vrf /home/*/.mozilla && rm -vrf /home/*/.cache/mozilla
@@ -495,6 +479,22 @@ EOF
 
 _other_configs_()
 {
+	### GOOGLE CHROME
+	cat <<"EOF" > /usr/bin/installer-google-chrome
+#!/bin/bash
+URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+FILE=$(basename "$URL")
+if wget --inet4-only --https-only --quiet --spider "$URL"; then
+    wget --inet4-only --https-only --show-progress -q "$URL" -O "$FILE"
+    apt install --install-recommends -y "./$FILE"
+	rm -vf "$FILE"
+else
+    echo "Error $URL not found."
+fi
+EOF
+	chmod +x /usr/bin/installer-google-chrome
+	bash /usr/bin/installer-google-chrome
+
 	### LIQUORIX KERNEL
  	### curl -s 'https://liquorix.net/install-liquorix.sh' | sudo bash
 	curl -s "https://liquorix.net/liquorix-keyring.gpg" | gpg --batch --yes --output /etc/apt/keyrings/liquorix-keyring.gpg --dearmor
