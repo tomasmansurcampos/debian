@@ -19,6 +19,7 @@ _nix()
 
 	nix-env -iA nixpkgs.nmap
 	nix-env -iA nixpkgs.zenmap
+	nix-env -iA nixpkgs.cmus
  	nix-env -iA nixpkgs.fastfetch
 	nix-env -iA nixpkgs.yt-dlp
   	nix-env -iA nixpkgs.putty
