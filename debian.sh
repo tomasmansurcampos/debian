@@ -242,6 +242,9 @@ tls_query_padding_blocksize: 128
 edns_client_subnet_private : 1
 round_robin_upstreams: 0
 idle_timeout: 10000
+tls_connection_retries: 5 #2
+tls_backoff_time: 1500 #3600
+timeout: 10000 #5000
 tls_min_version: GETDNS_TLS1_3
 tls_max_version: GETDNS_TLS1_3
 listen_addresses:
@@ -249,12 +252,12 @@ listen_addresses:
 #  - 0::1
 #dnssec: GETDNS_EXTENSION_TRUE
 upstream_recursive_servers:
-  - address_data: 185.222.222.222
+  - address_data: 45.11.45.11
     tls_auth_name: "dot.sb"
     tls_pubkey_pinset:
       - digest: "sha256"
         value: amEjS6OJ74LvhMNJBxN3HXxOMSWAriaFoyMQn/Nb5FU=
-  - address_data: 45.11.45.11
+  - address_data: 185.222.222.222
     tls_auth_name: "dot.sb"
     tls_pubkey_pinset:
       - digest: "sha256"
