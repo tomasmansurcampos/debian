@@ -342,6 +342,7 @@ URLS=(
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compressed.txt"
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
     "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-only/hosts"
+	"https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn-only/hosts"
 )
 
 # Directorio de trabajo temporal para los archivos descargados
