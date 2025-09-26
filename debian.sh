@@ -204,13 +204,13 @@ listen_addresses:
 #  - 0::1
 #dnssec: GETDNS_EXTENSION_TRUE
 upstream_recursive_servers:
-  - address_data: 8.8.8.8
-    tls_auth_name: "dns.google"
   - address_data: 8.8.4.4
     tls_auth_name: "dns.google"
-#  - address_data: 2001:4860:4860::8888
-#    tls_auth_name: "dns.google"
+  - address_data: 8.8.8.8
+    tls_auth_name: "dns.google"
 #  - address_data: 2001:4860:4860::8844
+#    tls_auth_name: "dns.google"
+#  - address_data: 2001:4860:4860::8888
 #    tls_auth_name: "dns.google"
 EOF
 
