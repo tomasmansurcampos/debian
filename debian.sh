@@ -333,7 +333,7 @@ EOF
 	systemctl restart ntpsec.service
 
 	### BLOCKING ADS TRACKERS MALWARE SPYWARE TELEMETRY CRYPTOMINING BY HOSTS FILE DIRECTLY
-	cat <<"EOF" > /usr/bin/make-hosts-block-ads
+	cat <<"EOF" > /usr/bin/shit-blocker
 #!/bin/bash
 
 # Array de URLs a descargar
@@ -392,8 +392,8 @@ echo "🧹 Limpiando archivos temporales..."
 echo -e "\e[32m ✅ Proceso completado. ¡Tu archivo /etc/hosts está actualizado! \e[0m"
 EOF
 
-	chmod +x /usr/bin/make-hosts-block-ads
-	bash /usr/bin/make-hosts-block-ads
+	chmod +x /usr/bin/shit-blocker
+	bash /usr/bin/shit-blocker
 }
 
 _debian_desktop()
