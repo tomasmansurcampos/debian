@@ -338,11 +338,11 @@ EOF
 
 # Array de URLs a descargar
 URLS=(
-    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/pro-compressed.txt"
+    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/ultimate-compressed.txt"
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compressed.txt"
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
     "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-only/hosts"
-	"https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn-only/hosts"
+    "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn-only/hosts"
 )
 
 # Directorio de trabajo temporal para los archivos descargados
@@ -351,9 +351,9 @@ ALL_FILTER_FILE="$TEMP_DIR/hosts-filter-all"
 ORIGINAL_HOSTS="/etc/hosts"
 BACKUP_HOSTS="/etc/hosts.bak"
 
-# Crear directorio temporal y limpiar archivos anteriores
+# Limpiar archivos anteriores y crear directorio temporal
+rm -vrf "$TEMP_DIR"
 mkdir -p -v "$TEMP_DIR"
-rm -vf "$ALL_FILTER_FILE"
 
 # 1. Bucle para descargar los archivos de hosts
 for url in "${URLS[@]}"; do
