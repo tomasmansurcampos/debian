@@ -336,60 +336,60 @@ EOF
 	cat <<"EOF" > /usr/bin/make-hosts-block-ads
 #!/bin/bash
 
-URL1="https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/ultimate-compressed.txt"
-URL2="https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compressed.txt"
-URL3="https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
-URL4="https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-only/hosts"
+# Array de URLs a descargar
+URLS=(
+    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/pro-compressed.txt"
+    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compressed.txt"
+    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
+    "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-only/hosts"
+)
 
-rm -vrf /etc/hosts-filter*
+# Directorio de trabajo temporal para los archivos descargados
+TEMP_DIR="/tmp/hosts-filters"
+ALL_FILTER_FILE="$TEMP_DIR/hosts-filter-all"
+ORIGINAL_HOSTS="/etc/hosts"
+BACKUP_HOSTS="/etc/hosts.bak"
 
-### ULTIMATE
-wget --inet4-only --https-only --show-progress --quiet "$URL1" -O /etc/hosts-filter-hagezi-ultimate
-if [ $? -eq 0 ]; then
-    echo -e "\e[32m ✅ Hagezi Ultimate hosts file downloaded! \e[0m"
-else
-    echo -e "\e[31m ❌ Error: "$URL1". \e[0m"
-    exit 1
-fi
+# Crear directorio temporal y limpiar archivos anteriores
+mkdir -p -v "$TEMP_DIR"
+rm -vf "$ALL_FILTER_FILE"
 
-### DOH
-wget --inet4-only --https-only --show-progress --quiet "$URL2" -O /etc/hosts-filter-hagezi-doh
-if [ $? -eq 0 ]; then
-    echo -e "\e[32m ✅ Hagezi DOH hosts file downloaded! \e[0m"
-else
-    echo -e "\e[31m ❌ Error: "$URL2". \e[0m"
-    exit 1
-fi
+# 1. Bucle para descargar los archivos de hosts
+for url in "${URLS[@]}"; do
+    filename=$(basename "$url")
+    output_file="$TEMP_DIR/$filename"
+    
+    echo "⬇️ Descargando archivo desde: $url"
+    
+    # Descarga el archivo, revisa el estado y sale si falla
+    if ! wget --inet4-only --https-only --show-progress --quiet "$url" -O "$output_file"; then
+        echo -e "\e[31m ❌ Error al descargar $url. Saliendo del script. \e[0m"
+        exit 1
+    fi
+    echo -e "\e[32m ✅ Descarga de $filename completada. \e[0m"
+    
+    # Unir el contenido al archivo final, excluyendo líneas vacías o de comentarios
+    grep -vE "^#|^$" "$output_file" >> "$ALL_FILTER_FILE"
+done
 
-### TIF
-wget --inet4-only --https-only --show-progress --quiet "$URL3" -O /etc/hosts-filter-hagezi-tif
-if [ $? -eq 0 ]; then
-    echo -e "\e[32m ✅ Hagezi TIF hosts file downloaded! \e[0m"
-else
-    echo -e "\e[31m ❌ Error: "$URL3". \e[0m"
-    exit 1
-fi
+# 2. Modificar el archivo /etc/hosts
+echo -e "\n🔄 Uniendo los archivos y modificando /etc/hosts..."
 
-### FAKENEWS AND GAMBLING
-wget --inet4-only --https-only --show-progress --quiet "$URL4" -O /etc/hosts-filter-fakenews-gambling
-if [ $? -eq 0 ]; then
-    echo -e "\e[32m ✅ Steven Black Fakenews Gambling hosts file downloaded! \e[0m"
-else
-    echo -e "\e[31m ❌ Error: "$URL4". \e[0m"
-    exit 1
-fi
+# Sobrescribir /etc/hosts con una versión limpia (solo el contenido original y lo esencial)
+echo "127.0.0.1       localhost" > "$ORIGINAL_HOSTS"
+echo "127.0.0.1       localhost.localdomain" >> "$ORIGINAL_HOSTS"
+echo "" >> "$ORIGINAL_HOSTS"
 
-cat /etc/hosts-filter-hagezi-ultimate > /etc/hosts-filter-all
-cat /etc/hosts-filter-hagezi-doh >> /etc/hosts-filter-all
-cat /etc/hosts-filter-hagezi-tif >> /etc/hosts-filter-all
-cat /etc/hosts-filter-fakenews-gambling >> /etc/hosts-filter-all
+# Agregar el contenido del archivo unificado al final de /etc/hosts
+cat "$ALL_FILTER_FILE" >> "$ORIGINAL_HOSTS"
 
-cp -v /etc/hosts.noipv6.bak /etc/hosts
-cat /etc/hosts-filter-all >> /etc/hosts
+echo -e "\e[32m ✅ Archivo /etc/hosts modificado con éxito. \e[0m"
 
-rm -vrf /etc/hosts-filter*
+# 3. Limpieza de archivos temporales
+echo "🧹 Limpiando archivos temporales..."
+#rm -rf "$TEMP_DIR"
 
-echo -e "\e[32m ✅ Archivo /etc/hosts bloqueando todo lo malo !!! \e[0m"
+echo -e "\e[32m ✅ Proceso completado. ¡Tu archivo /etc/hosts está actualizado! \e[0m"
 EOF
 
 	chmod +x /usr/bin/make-hosts-block-ads
