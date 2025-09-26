@@ -395,6 +395,14 @@ EOF
 
 	chmod +x /usr/bin/shit-blocker
 	bash /usr/bin/shit-blocker
+
+	### HOSTS RESTORED CONFIG
+	cat <<"EOF" > /usr/bin/restore-hosts
+#!/bin/bash
+cp -v /etc/hosts.noipv6.bak /etc/hosts
+echo -e "\e[32m ✅ Archivo /etc/hosts original restaurado. \e[0m"
+EOF
+	chmod +x /usr/bin/restore-hosts
 }
 
 _debian_desktop()
