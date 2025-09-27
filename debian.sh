@@ -319,6 +319,8 @@ EOF
 	cat <<"EOF" > /usr/bin/shit-blocker
 #!/bin/bash
 
+COUNT=1
+
 # Array de URLs a descargar
 URLS=(
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/ultimate-compressed.txt"
@@ -341,7 +343,8 @@ mkdir -p -v "$TEMP_DIR"
 # 1. Bucle para descargar los archivos de hosts
 for url in "${URLS[@]}"; do
     filename=$(basename "$url")
-    output_file="$TEMP_DIR/$filename"
+    # Se usa el formato de dos dígitos para que se vean bien ordenados (ej. 01_nombre.txt)
+    output_file="$TEMP_DIR/$(printf "%02d" $COUNT)_$filename" 
     
     echo "⬇️ Descargando archivo desde: $url"
     
@@ -354,6 +357,9 @@ for url in "${URLS[@]}"; do
     
     # Unir el contenido al archivo final, excluyendo líneas vacías o de comentarios
     grep -vE "^#|^$" "$output_file" >> "$ALL_FILTER_FILE"
+    
+    # Se usa expansión aritmética para incrementar.
+    COUNT=$((COUNT + 1))
 done
 
 # 2. Modificar el archivo /etc/hosts
