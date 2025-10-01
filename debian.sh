@@ -335,7 +335,7 @@ COUNT=1
 
 # Array de URLs a descargar
 URLS=(
-    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/ultimate-compressed.txt"
+    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/pro-compressed.txt"
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compressed.txt"
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
     "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-only/hosts"
@@ -357,19 +357,19 @@ for url in "${URLS[@]}"; do
     filename=$(basename "$url")
     # Se usa el formato de dos dígitos para que se vean bien ordenados (ej. 01_nombre.txt)
     output_file="$TEMP_DIR/$(printf "%02d" $COUNT)_$filename" 
-    
+
     echo "⬇️ Descargando archivo desde: $url"
-    
+
     # Descarga el archivo, revisa el estado y sale si falla
     if ! wget --inet4-only --https-only --show-progress --quiet "$url" -O "$output_file"; then
         echo -e "\e[31m ❌ Error al descargar $url. Saliendo del script. \e[0m"
         exit 1
     fi
     echo -e "\e[32m ✅ Descarga de $filename completada. \e[0m"
-    
+
     # Unir el contenido al archivo final, excluyendo líneas vacías o de comentarios
     grep -vE "^#|^$" "$output_file" >> "$ALL_FILTER_FILE"
-    
+
     # Se usa expansión aritmética para incrementar.
     COUNT=$((COUNT + 1))
 done
@@ -378,12 +378,12 @@ done
 echo -e "\n🔄 Uniendo los archivos y modificando /etc/hosts..."
 
 # Sobrescribir /etc/hosts con una versión limpia (solo el contenido original y lo esencial)
-echo "127.0.0.1       localhost" > "$ORIGINAL_HOSTS"
-echo "127.0.0.1       localhost.localdomain" >> "$ORIGINAL_HOSTS"
+cp -v /etc/hosts.noipv6.bak "$ORIGINAL_HOSTS"
 echo "" >> "$ORIGINAL_HOSTS"
 
 # Agregar el contenido del archivo unificado al final de /etc/hosts
 cat "$ALL_FILTER_FILE" >> "$ORIGINAL_HOSTS"
+cp -v "$ORIGINAL_HOSTS" /etc/hosts-filter-all
 
 echo -e "\e[32m ✅ Archivo /etc/hosts modificado con éxito. \e[0m"
 
@@ -397,13 +397,23 @@ EOF
 	chmod +x /usr/bin/shit-blocker
 	#bash /usr/bin/shit-blocker
 
-	### HOSTS RESTORED CONFIG
+	### RESTORE ORIGINAL HOST FILE
 	cat <<"EOF" > /usr/bin/restore-hosts
 #!/bin/bash
 cp -v /etc/hosts.noipv6.bak /etc/hosts
 echo -e "\e[32m ✅ Archivo /etc/hosts original restaurado. \e[0m"
 EOF
 	chmod +x /usr/bin/restore-hosts
+
+	### RESTORE FILTERED HOST FILE
+	cat <<"EOF" > /usr/bin/restore-filtered-hosts
+#!/bin/bash
+cp -v /etc/hosts-filter-all /etc/hosts
+echo -e "\e[32m ✅ Archivo /etc/hosts con filtros restaurado. \e[0m"
+EOF
+	chmod +x /usr/bin/restore-filtered-hosts
+
+	### 
 }
 
 _debian_desktop()
