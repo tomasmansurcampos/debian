@@ -279,7 +279,6 @@ EOF
 	### GOOGLE
 	cat <<"EOF" > /usr/bin/dnsgoogle
 #!/bin/bash
-cp -v /etc/hosts.bak /etc/hosts
 cp -v /etc/stubby/stubby.yml.google /etc/stubby/stubby.yml
 systemctl restart stubby.service
 EOF
@@ -288,7 +287,6 @@ EOF
 	### DNS.SB
 	cat <<"EOF" > /usr/bin/dnssb
 #!/bin/bash
-cp -v /etc/hosts.bak /etc/hosts
 cp -v /etc/stubby/stubby.yml.dns.sb /etc/stubby/stubby.yml
 systemctl restart stubby.service
 EOF
@@ -336,7 +334,7 @@ COUNT=1
 
 # Array de URLs a descargar
 URLS=(
-    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/pro-compressed.txt"
+    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/ultimate-compressed.txt"
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compressed.txt"
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
     "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-only/hosts"
