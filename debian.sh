@@ -125,7 +125,7 @@ EOF
 	cat <<EOF > /etc/apt/sources.list.d/debian.sources
 Types: deb deb-src
 URIs: http://debian.web.trex.fi/debian/
-Suites: $(lsb_release -cs) $(lsb_release -cs)-updates $(lsb_release -cs)-backports
+Suites: $(lsb_release -cs) $(lsb_release -cs)-updates
 Components: main contrib non-free non-free-firmware
 Enabled: yes
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
