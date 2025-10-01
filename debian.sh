@@ -17,6 +17,7 @@ _nix()
 {
 	sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
 
+	nix-env -iA nixpkgs.firefox
 	nix-env -iA nixpkgs.nmap
 	nix-env -iA nixpkgs.zenmap
 	nix-env -iA nixpkgs.cmus
@@ -264,8 +265,7 @@ EOF
 	### STATIC RESOLV CONF FILE
 	cp -v /etc/resolv.conf /etc/resolv.conf.bak
 	cat <<"EOF" > /etc/resolv.conf.stubby
-nameserver 127.0.0.3
-options trust-ad
+nameserver 127.0.0.1
 EOF
 	cp -v /etc/resolv.conf.stubby /etc/resolv.conf
 	chattr +i /etc/resolv.conf
@@ -278,9 +278,6 @@ EOF
 	### GOOGLE
 	cat <<"EOF" > /usr/bin/dnsgoogle
 #!/bin/bash
-chattr -i /etc/resolv.conf
-cp -v /etc/resolv.conf.stubby /etc/resolv.conf
-chattr +i /etc/resolv.conf
 cp -v /etc/hosts.bak /etc/hosts
 cp -v /etc/stubby/stubby.yml.google /etc/stubby/stubby.yml
 systemctl restart stubby.service
@@ -290,14 +287,29 @@ EOF
 	### DNS.SB
 	cat <<"EOF" > /usr/bin/dnssb
 #!/bin/bash
-chattr -i /etc/resolv.conf
-cp -v /etc/resolv.conf.stubby /etc/resolv.conf
-chattr +i /etc/resolv.conf
 cp -v /etc/hosts.bak /etc/hosts
 cp -v /etc/stubby/stubby.yml.dns.sb /etc/stubby/stubby.yml
 systemctl restart stubby.service
 EOF
 	chmod +x /usr/bin/dnssb
+
+	### LOCAL DNS SERVER
+	apt install -y dnsmasq
+	systemctl stop dnsmasq.service
+	cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf.bak
+	cat <<"EOF" > /etc/dnsmasq.conf
+port=53
+domain-needed
+bogus-priv
+no-resolv
+server=127.0.0.3@lo
+strict-order
+interface=enp3s0
+no-dhcp-interface=enp3s0
+bind-interfaces
+cache-size=0
+EOF
+	systemctl restart dnsmasq.service
 
 	### NTP ENCRYPTED
 	apt update && apt install -y ntpsec
@@ -383,7 +395,7 @@ echo -e "\e[32m ✅ Proceso completado. ¡Tu archivo /etc/hosts está actualizad
 EOF
 
 	chmod +x /usr/bin/shit-blocker
-	bash /usr/bin/shit-blocker
+	#bash /usr/bin/shit-blocker
 
 	### HOSTS RESTORED CONFIG
 	cat <<"EOF" > /usr/bin/restore-hosts
@@ -418,27 +430,6 @@ fi
 EOF
 	chmod +x /usr/bin/installer-tor-browser
 	bash /usr/bin/installer-tor-browser
-
- 	### FIREFOX
-	#apt update && apt install --install-recommends -y firefox-esr
-	apt purge -y firefox* && rm -vrf /home/*/.mozilla && rm -vrf /home/*/.cache/mozilla
-	install -d -m 0755 /etc/apt/keyrings
-	wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
-	gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc | awk '/pub/{getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nThe key fingerprint matches ("$0").\n"; else print "\nVerification failed: the fingerprint ("$0") does not match the expected one.\n"}'
-	cat <<"EOF" > /etc/apt/sources.list.d/mozilla.sources
-Types: deb
-URIs: https://packages.mozilla.org/apt
-Suites: mozilla
-Components: main
-Architectures: amd64
-Signed-By: /etc/apt/keyrings/packages.mozilla.org.asc
-EOF
-	cat <<"EOF" > /etc/apt/preferences.d/mozilla
-Package: *
-Pin: origin packages.mozilla.org
-Pin-Priority: 1000
-EOF
-	apt update && apt install --install-recommends -y firefox
 
  	### PACKET TRACER NO-NETWORK
 	cat <<"EOF" > /usr/share/applications/packet-tracer-no-network.desktop
@@ -481,6 +472,27 @@ EOF
 
 _other_configs_()
 {
+	### FIREFOX
+	#apt update && apt install --install-recommends -y firefox-esr
+	apt purge -y firefox* && rm -vrf /home/*/.mozilla && rm -vrf /home/*/.cache/mozilla
+	install -d -m 0755 /etc/apt/keyrings
+	wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+	gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc | awk '/pub/{getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nThe key fingerprint matches ("$0").\n"; else print "\nVerification failed: the fingerprint ("$0") does not match the expected one.\n"}'
+	cat <<"EOF" > /etc/apt/sources.list.d/mozilla.sources
+Types: deb
+URIs: https://packages.mozilla.org/apt
+Suites: mozilla
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/packages.mozilla.org.asc
+EOF
+	cat <<"EOF" > /etc/apt/preferences.d/mozilla
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+EOF
+	apt update && apt install --install-recommends -y firefox
+
 	### GOOGLE CHROME
 	cat <<"EOF" > /usr/bin/installer-google-chrome
 #!/bin/bash
@@ -552,9 +564,10 @@ EOF
 	cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf.bak
 	cat <<"EOF" > /etc/dnsmasq.conf
 port=53
-#domain-needed
+domain-needed
 bogus-priv
-resolv-file=/etc/resolv.conf
+no-resolv
+server=127.0.0.3@lo
 strict-order
 interface=enp3s0
 no-dhcp-interface=enp3s0
