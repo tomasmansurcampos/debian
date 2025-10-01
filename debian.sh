@@ -70,6 +70,7 @@ _flatpak()
 	#flatpak install -y flathub org.gimp.GIMP
 	#flatpak install -y flathub io.github.peazip.PeaZip
  	flatpak install -y flathub io.github.ungoogled_software.ungoogled_chromium
+	flatpak install -y flathub io.gitlab.librewolf-community
 	flatpak install -y flathub network.loki.Session
 	#flatpak install -y flathub io.github.Hexchat
 	flatpak install -y flathub org.telegram.desktop
