@@ -412,8 +412,6 @@ cp -v /etc/hosts-filter-all /etc/hosts
 echo -e "\e[32m ✅ Archivo /etc/hosts con filtros restaurado. \e[0m"
 EOF
 	chmod +x /usr/bin/restore-filtered-hosts
-
-	### 
 }
 
 _debian_desktop()
