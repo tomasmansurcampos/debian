@@ -4,12 +4,12 @@ ESSENTIAL_PACKAGES="build-essential dnsutils kpcli man nano fwupd gnupg gcc gcc-
 
 PACKAGES="gnome-disk-utility"
 
+GNOME="apt install --no-install-recommends -y gnome-core"
+
 UNWANTED_PACKAGES="firefox-esr firefox* synaptic smtube qps quassel meteo-qt audacious popularity-contest evolution qbittorrent quodlibet parole exfalso yelp seahorse totem cheese" #malcontent
 UNWANTED_GNOME_DE_PACKAGES="gnome-software gnome-games evolution transmission evolution-data-server gnome-calendar"
 
 INTEL_THINGS="intel-microcode iucode-tool *nvidia* firmware-intel* intel-media-va-driver-non-free"
-
-GNOME_THINGS="gnome-games* gnome-weather gnome-software-common gnome-boxes gnome-system-monitor rhythmbox transmission-common gnome-games gnome-clocks zutty gnome-characters debian-reference-common gnome-sound-recorder gnome-connections gnome-music gnome-weather gnome-calculator gnome-calendar gnome-contacts gnome-maps" #gnome-tour libreoffice*
 
 OPENBOX="openbox menu obconf lightdm xfce4-terminal network-manager git kpcli nnn pcmanfm"
 
