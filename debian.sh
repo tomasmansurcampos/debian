@@ -2,7 +2,7 @@
 
 ESSENTIAL_PACKAGES="build-essential dnsutils kpcli man nano fwupd gnupg gcc gcc-doc nasm gdb python-is-python3 stubby curl wget screen minicom jq git make binutils tcpdump lynx lm-sensors fancontrol lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar sox libsox-fmt-all"
 
-PACKAGES="gnome-disk-utility audacity spek"
+PACKAGES="gnome-disk-utility"
 
 UNWANTED_PACKAGES="firefox-esr firefox* synaptic smtube qps quassel meteo-qt audacious popularity-contest evolution qbittorrent quodlibet parole exfalso yelp seahorse totem cheese" #malcontent
 UNWANTED_GNOME_DE_PACKAGES="gnome-software gnome-games evolution transmission evolution-data-server gnome-calendar"
@@ -32,8 +32,8 @@ _nix()
 	nix-env -iA nixpkgs.libreoffice-qt6-fresh
  	nix-env -iA nixpkgs.ffmpeg-full
  	nix-env -iA nixpkgs.vlc
-  	#nix-env -iA nixpkgs.spek
-	#nix-env -iA nixpkgs.audacity
+  	nix-env -iA nixpkgs.spek
+	nix-env -iA nixpkgs.audacity
    	#nix-env -iA nixpkgs.ardour
 }
 
