@@ -267,10 +267,10 @@ EOF
 
 	### STATIC RESOLV CONF FILE
 	cp -v /etc/resolv.conf /etc/resolv.conf.bak
-	cat <<"EOF" > /etc/resolv.conf.stubby
+	cat <<"EOF" > /etc/resolv.conf.dnsmasq
 nameserver 127.0.0.1
 EOF
-	cp -v /etc/resolv.conf.stubby /etc/resolv.conf
+	cp -v /etc/resolv.conf.dnsmasq /etc/resolv.conf
 	chattr +i /etc/resolv.conf
 
 	cp -v /etc/hosts /etc/hosts.bak
