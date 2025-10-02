@@ -77,6 +77,7 @@ _flatpak()
 	#flatpak install -y flathub io.github.Hexchat
 	flatpak install -y flathub org.telegram.desktop
 	flatpak install -y flathub com.discordapp.Discord
+	flatpak install -y flathub us.zoom.Zoom
 	#flatpak install -y flathub io.bassi.Amberol
 	#flatpak install -y flathub io.freetubeapp.FreeTube
 	flatpak install -y flathub com.spotify.Client
