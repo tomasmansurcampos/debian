@@ -397,7 +397,7 @@ echo -e "\e[32m ✅ Archivo /etc/hosts modificado con éxito. \e[0m"
 
 # 3. Limpieza de archivos temporales
 echo "🧹 Limpiando archivos temporales..."
-#rm -vrf "$TEMP_DIR"
+rm -vrf "$TEMP_DIR"
 
 echo -e "\e[32m ✅ Proceso completado. ¡Tu archivo /etc/hosts está actualizado! \e[0m"
 EOF
