@@ -336,9 +336,11 @@ COUNT=1
 
 # Array de URLs a descargar
 URLS=(
-    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/ultimate-compressed.txt"
+    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/pro-compressed.txt"
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compressed.txt"
     "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
+    "https://someonewhocares.org/hosts/zero/hosts"
+    "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
     "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-only/hosts"
     "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn-only/hosts"
 )
@@ -382,15 +384,20 @@ echo -e "\n🔄 Uniendo los archivos y modificando /etc/hosts..."
 cp -v /etc/hosts.noipv6.bak "$ORIGINAL_HOSTS"
 echo "" >> "$ORIGINAL_HOSTS"
 
-# Agregar el contenido del archivo unificado al final de /etc/hosts
-cat "$ALL_FILTER_FILE" >> "$ORIGINAL_HOSTS"
+# Limpiando archivo unificado de direcciones loopbak, link-local, comentarios, y lineas vacias
+grep -vE '^(127\.|255\.|::1|fe00::0|ff0[02]::|#fe80::).*' "$ALL_FILTER_FILE" > "$ALL_FILTER_FILE$(printf "%02d" 00)"
+grep -vE '^\s*#' "$ALL_FILTER_FILE$(printf "%02d" 00)" > "$ALL_FILTER_FILE$(printf "%02d" 01)"
+sed -i '/^\s*#/d' "$ALL_FILTER_FILE$(printf "%02d" 01)"
+
+# Agregar el contenido del archivo unificado limpio al final de /etc/hosts
+cat "$ALL_FILTER_FILE$(printf "%02d" 01)" >> "$ORIGINAL_HOSTS"
 cp -v "$ORIGINAL_HOSTS" /etc/hosts-filter-all
 
 echo -e "\e[32m ✅ Archivo /etc/hosts modificado con éxito. \e[0m"
 
 # 3. Limpieza de archivos temporales
 echo "🧹 Limpiando archivos temporales..."
-rm -vrf "$TEMP_DIR"
+#rm -vrf "$TEMP_DIR"
 
 echo -e "\e[32m ✅ Proceso completado. ¡Tu archivo /etc/hosts está actualizado! \e[0m"
 EOF
