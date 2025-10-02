@@ -401,9 +401,10 @@ rm -vrf "$TEMP_DIR"
 
 echo -e "\e[32m ✅ Proceso completado. ¡Tu archivo /etc/hosts está actualizado! \e[0m"
 EOF
-
 	chmod +x /usr/bin/shit-blocker
-	#bash /usr/bin/shit-blocker
+	bash /usr/bin/shit-blocker
+	systemctl restart stubby.service
+	systemctl restart dnsmasq.service
 
 	### RESTORE ORIGINAL HOST FILE
 	cat <<"EOF" > /usr/bin/restore-hosts
