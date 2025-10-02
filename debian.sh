@@ -11,7 +11,9 @@ INTEL_THINGS="intel-microcode iucode-tool *nvidia* firmware-intel* intel-media-v
 
 GNOME_THINGS="gnome-games* gnome-weather gnome-software-common gnome-boxes gnome-system-monitor rhythmbox transmission-common gnome-games gnome-clocks zutty gnome-characters debian-reference-common gnome-sound-recorder gnome-connections gnome-music gnome-weather gnome-calculator gnome-calendar gnome-contacts gnome-maps" #gnome-tour libreoffice*
 
-OPENBOX="openbox menu obconf lightdm xfce4-terminal network-manager git kpcli nnn pcmanfm geany"
+OPENBOX="openbox menu obconf lightdm xfce4-terminal network-manager git kpcli nnn pcmanfm"
+
+ICEWM="icewm lightdm xfce4-terminal network-manager git"
 
 _nix()
 {
