@@ -77,7 +77,7 @@ _flatpak()
 	flatpak install -y flathub com.discordapp.Discord
 	#flatpak install -y flathub io.bassi.Amberol
 	#flatpak install -y flathub io.freetubeapp.FreeTube
-	#flatpak install -y flathub com.spotify.Client
+	flatpak install -y flathub com.spotify.Client
 	flatpak install -y flathub org.qbittorrent.qBittorrent
 	#flatpak install -y flathub com.warlordsoftwares.youtube-downloader-4ktube
 	flatpak install -y flathub org.nicotine_plus.Nicotine
