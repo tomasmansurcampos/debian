@@ -337,7 +337,7 @@ COUNT=1
 
 # Array de URLs a descargar
 URLS=(
-	"https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/pro.plus-compressed.txt"
+	"https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/ultimate-compressed.txt"
 	"https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compressed.txt"
 	"https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
 	"https://raw.githubusercontent.com/hagezi/dns-blocklists/refs/heads/main/hosts/native.winoffice.txt"
@@ -397,6 +397,7 @@ cp -v /etc/hosts.noipv6.bak "$ORIGINAL_HOSTS"
 echo "" >> "$ORIGINAL_HOSTS"
 
 # Limpiando archivo unificado de direcciones loopbak, link-local, comentarios, y lineas vacias
+cp -v "$ALL_FILTER_FILE" /etc/$(basename "$ALL_FILTER_FILE")-unedited
 grep -vE '^(127\.|255\.|::1|fe00::0|ff0[02]::|#fe80::).*' "$ALL_FILTER_FILE" > "$ALL_FILTER_FILE$(printf "%02d" 00)"
 grep -vE '^\s*#' "$ALL_FILTER_FILE$(printf "%02d" 00)" > "$ALL_FILTER_FILE$(printf "%02d" 01)"
 sed -i '/^\s*#/d' "$ALL_FILTER_FILE$(printf "%02d" 01)"
@@ -412,13 +413,14 @@ echo "🧹 Limpiando archivos temporales..."
 rm -vrf "$TEMP_DIR"
 
 echo -e "\e[32m ✅ Proceso completado. ¡Tu archivo /etc/hosts está actualizado! \e[0m"
+
+systemctl restart dnsmasq.service
+systemctl restart stubby.service
 EOF
 	chmod +x /usr/bin/shit-blocker
 	bash /usr/bin/shit-blocker
-	systemctl restart stubby.service
-	systemctl restart dnsmasq.service
 
-	### RESTORE ORIGINAL HOST FILE
+	### RESTORE ORIGINAL HOSTS
 	cat <<"EOF" > /usr/bin/restore-hosts
 #!/bin/bash
 cp -v /etc/hosts.noipv6.bak /etc/hosts
@@ -426,7 +428,7 @@ echo -e "\e[32m ✅ Archivo /etc/hosts original restaurado. \e[0m"
 EOF
 	chmod +x /usr/bin/restore-hosts
 
-	### RESTORE FILTERED HOST FILE
+	### RESTORE FILTERED HOSTS
 	cat <<"EOF" > /usr/bin/restore-filtered-hosts
 #!/bin/bash
 cp -v /etc/hosts-filter-all /etc/hosts
