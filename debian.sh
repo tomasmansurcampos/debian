@@ -355,6 +355,7 @@ URLS=(
 	"https://someonewhocares.org/hosts/zero/hosts"
 	"https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
 	"https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-only/hosts"
+	"https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn-only/hosts"
 )
 
 # Directorio de trabajo temporal para los archivos descargados
