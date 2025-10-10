@@ -203,6 +203,9 @@ tls_query_padding_blocksize: 128
 edns_client_subnet_private : 1
 round_robin_upstreams: 0
 idle_timeout: 10000
+tls_connection_retries: 5 #2
+tls_backoff_time: 1900 #3600
+timeout: 6000 #5000
 tls_min_version: GETDNS_TLS1_3
 tls_max_version: GETDNS_TLS1_3
 listen_addresses:
@@ -232,8 +235,8 @@ edns_client_subnet_private : 1
 round_robin_upstreams: 0
 idle_timeout: 10000
 tls_connection_retries: 5 #2
-tls_backoff_time: 1500 #3600
-timeout: 10000 #5000
+tls_backoff_time: 1900 #3600
+timeout: 6000 #5000
 tls_min_version: GETDNS_TLS1_3
 tls_max_version: GETDNS_TLS1_3
 listen_addresses:
