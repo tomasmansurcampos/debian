@@ -447,6 +447,22 @@ _debian_desktop()
 	apt update
 	apt install --install-recommends -y $PACKAGES
 
+	### GOOGLE CHROME
+	cat <<"EOF" > /usr/bin/installer-google-chrome
+#!/bin/bash
+URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+FILE=$(basename "$URL")
+if wget --inet4-only --https-only --quiet --spider "$URL"; then
+    wget --inet4-only --https-only --show-progress -q "$URL" -O "$FILE"
+    apt install --install-recommends -y "./$FILE"
+	rm -vf "$FILE"
+else
+    echo "Error $URL not found."
+fi
+EOF
+	chmod +x /usr/bin/installer-google-chrome
+	bash /usr/bin/installer-google-chrome
+
 	### TOR BROWSER
 	cat <<"EOF" > /usr/bin/installer-tor-browser
 #!/bin/bash
@@ -527,22 +543,6 @@ Pin: origin packages.mozilla.org
 Pin-Priority: 1000
 EOF
 	apt update && apt install --install-recommends -y firefox
-
-	### GOOGLE CHROME
-	cat <<"EOF" > /usr/bin/installer-google-chrome
-#!/bin/bash
-URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-FILE=$(basename "$URL")
-if wget --inet4-only --https-only --quiet --spider "$URL"; then
-    wget --inet4-only --https-only --show-progress -q "$URL" -O "$FILE"
-    apt install --install-recommends -y "./$FILE"
-	rm -vf "$FILE"
-else
-    echo "Error $URL not found."
-fi
-EOF
-	chmod +x /usr/bin/installer-google-chrome
-	bash /usr/bin/installer-google-chrome
 
 	### LIQUORIX KERNEL
  	### curl -s 'https://liquorix.net/install-liquorix.sh' | sudo bash
