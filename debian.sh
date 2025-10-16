@@ -422,7 +422,7 @@ systemctl restart dnsmasq.service
 systemctl restart stubby.service
 EOF
 	chmod +x /usr/bin/shit-blocker
-	#bash /usr/bin/shit-blocker
+	bash /usr/bin/shit-blocker
 
 	### RESTORE ORIGINAL HOSTS
 	cat <<"EOF" > /usr/bin/restore-hosts
