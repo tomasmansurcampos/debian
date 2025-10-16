@@ -266,7 +266,7 @@ upstream_recursive_servers:
 #        value: amEjS6OJ74LvhMNJBxN3HXxOMSWAriaFoyMQn/Nb5FU=
 EOF
 
-	cp -v /etc/stubby/stubby.yml.google /etc/stubby/stubby.yml
+	cp -v /etc/stubby/stubby.yml.dns.sb /etc/stubby/stubby.yml
 	systemctl enable --now stubby.service
 	systemctl restart stubby.service
 
@@ -341,7 +341,7 @@ COUNT=1
 
 # Array de URLs a descargar
 URLS=(
-	"https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/pro-compressed.txt"
+	"https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/ultimate-compressed.txt"
 	"https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/doh-compressed.txt"
 	"https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/tif-compressed.txt"
 	"https://raw.githubusercontent.com/hagezi/dns-blocklists/refs/heads/main/hosts/native.winoffice.txt"
