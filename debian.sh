@@ -64,7 +64,7 @@ _flatpak()
 	#flatpak install -y flathub io.github.ungoogled_software.ungoogled_chromium
 	#flatpak install -y flathub org.gnome.TextEditor
 	#ln -vsf /var/lib/flatpak/app/org.gnome.TextEditor/current/active/export/bin/org.gnome.TextEditor /usr/bin/gedit
-	#flatpak install -y flathub com.vscodium.codium
+	flatpak install -y flathub com.vscodium.codium
 	#ln -vsf /var/lib/flatpak/app/com.vscodium.codium/current/active/export/bin/com.vscodium.codium /usr/bin/code
 	#ln -vsf /var/lib/flatpak/app/com.vscodium.codium/current/active/export/bin/com.vscodium.codium /usr/bin/codium
 	#ln -vsf /var/lib/flatpak/app/com.vscodium.codium/current/active/export/bin/com.vscodium.codium /usr/bin/vscodium
