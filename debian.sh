@@ -2,7 +2,7 @@
 
 ESSENTIAL_PACKAGES="build-essential dnsutils man nano gnupg gcc nasm gdb python-is-python3 stubby curl wget screen minicom git make binutils tcpdump lynx lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar sox libsox-fmt-all"
 
-PACKAGES="gnome-tweaks vlc speak audacity keepassxc libreoffice"
+PACKAGES="gnome-tweaks vlc speak audacity keepassxc libreoffice qbittorrent geany"
 
 GNOME="apt install --no-install-recommends -y gnome-core && apt install -y $PACKAGES && apt install -y $ESSENTIAL_PACKAGES"
 
