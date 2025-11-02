@@ -4,7 +4,7 @@ ESSENTIAL_PACKAGES="build-essential dnsutils stubby man nano gnupg gcc nasm gdb 
 
 PACKAGES="gnome-tweaks vlc spek audacity keepassxc libreoffice qbittorrent geany"
 
-GNOME="apt install --no-install-recommends -y gnome-core && apt install -y $PACKAGES && apt install -y $ESSENTIAL_PACKAGES"
+GNOME="apt install --no-install-recommends -y gnome-core && apt install --install-recommends -y $PACKAGES && apt install -y $ESSENTIAL_PACKAGES"
 
 UNWANTED_PACKAGES="firefox-esr firefox* synaptic smtube qps quassel meteo-qt audacious popularity-contest evolution qbittorrent quodlibet parole exfalso yelp seahorse totem cheese" #malcontent
 UNWANTED_GNOME_DE_PACKAGES="gnome-software gnome-games evolution transmission evolution-data-server gnome-calendar"
