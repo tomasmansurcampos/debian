@@ -2,7 +2,7 @@
 
 ESSENTIAL_PACKAGES="build-essential dnsutils stubby man nano gnupg gpgv gcc nasm gdb python-is-python3 stubby curl wget screen minicom git make binutils tcpdump lynx lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar ffmpeg libavcodec-extra sox libsox-fmt-all"
 
-PACKAGES="gnome-tweaks vlc spek audacity keepassxc libreoffice qbittorrent geany putty"
+PACKAGES="gnome-tweaks flatpak vlc spek audacity keepassxc libreoffice qbittorrent geany putty"
 
 GNOME="apt install --no-install-recommends -y gnome-core && apt install --install-recommends -y $PACKAGES && apt install -y $ESSENTIAL_PACKAGES"
 
