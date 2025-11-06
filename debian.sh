@@ -267,8 +267,13 @@ EOF
 	systemctl enable --now stubby.service
 	systemctl restart stubby.service
 
+	### STUBBY RESOLV CONF FILE
+	cat <<"EOF" > /etc/resolv.conf.stubby
+nameserver 127.0.0.3
+EOF
+
 	### STATIC RESOLV CONF FILE
-	cp -v /etc/resolv.conf /etc/resolv.conf.bak
+	cp -v /etc/resolv.conf /etc/resolv.conf.original
 	cat <<"EOF" > /etc/resolv.conf.dnsmasq
 nameserver 127.0.0.1
 EOF
