@@ -102,16 +102,16 @@ _basic_setup()
 	  exit
 	fi
 
-	cp -v /root/.bashrc /root/.bashrc.bak
-	cat <<"EOF" >> /root/.bashrc # this is IMPORTANT.
-export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
-EOF
+	cp -v /root/.bashrc /root/.bashrc.original
+#	cat <<"EOF" >> /root/.bashrc # this is IMPORTANT.
+#export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+#EOF
 	cat <<"EOF" >> /root/.bashrc
 alias apt-clean='apt autoclean && apt clean && rm -vrf /var/lib/apt/lists/* && apt clean'
 EOF
 	source /root/.bashrc
 
- 	cp -v /etc/nanorc /etc/nanorc.bak
+ 	cp -v /etc/nanorc /etc/nanorc.original
  	echo "set linenumbers" >> /etc/nanorc
 
 	mkdir -v -p /opt/apps
@@ -141,7 +141,7 @@ Components: main contrib non-free non-free-firmware
 Enabled: yes
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 EOF
-	mv -v /etc/apt/sources.list /etc/apt/.sources.list.bak
+	mv -v /etc/apt/sources.list /etc/apt/.sources.list.original
 	rm -vf /etc/apt/sources.list
 	rm -vf /etc/apt/sources.list~
 	apt autoclean && apt clean && rm -vrf /var/lib/apt/lists/* && apt clean
@@ -203,9 +203,6 @@ tls_query_padding_blocksize: 128
 edns_client_subnet_private : 1
 round_robin_upstreams: 0
 idle_timeout: 10000
-tls_connection_retries: 5 #2
-tls_backoff_time: 1900 #3600
-timeout: 6000 #5000
 tls_min_version: GETDNS_TLS1_3
 tls_max_version: GETDNS_TLS1_3
 listen_addresses:
