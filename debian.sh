@@ -559,7 +559,8 @@ EOF
 	#apt update && apt install --install-recommends -y linux-image-liquorix-amd64 linux-headers-liquorix-amd64
 
 	### VSCODE
-	wget --inet4-only -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+	apt install -y wget gpg apt-transport-https
+	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 	install -D -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft.gpg
 	rm -vf microsoft.gpg
 	cat <<EOF > /etc/apt/sources.list.d/vscode.sources
@@ -567,7 +568,7 @@ Types: deb
 URIs: https://packages.microsoft.com/repos/code
 Suites: stable
 Components: main
-Architectures: $(dpkg --print-architecture)
+Architectures: amd64,arm64,armhf
 Signed-By: /usr/share/keyrings/microsoft.gpg
 EOF
 	apt update && apt install -y code
