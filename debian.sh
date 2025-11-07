@@ -955,10 +955,10 @@ FILE="$LATEST_VERSION.$OS-$ARCH.tar.gz"
 URL="$GO_URL_BASE/$FILE"
 if wget --inet4-only --https-only --quiet --spider "$URL"; then
 	wget --inet4-only --https-only --show-progress -q "$URL" -O "$FILE"
-	rm -rf /usr/local/go
-	rm -rf /opt/apps/go
+	rm -vrf /usr/local/go
+	rm -vrf /opt/apps/go*
 	tar -C /opt/apps -xzf "$FILE"
-	rm -rf "$FILE"
+	rm -vrf "$FILE"
 	if ! grep -q "export PATH=\"\$PATH:/opt/apps/go/bin\"" /etc/profile; then
 		echo "export PATH=\$PATH:/opt/apps/go/bin" | tee /etc/profile.d/go-path.sh > /dev/null
 		echo "Ruta de Go agregada a /etc/profile.d/go-path.sh para todos los usuarios."
