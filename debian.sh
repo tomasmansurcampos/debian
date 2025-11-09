@@ -1,10 +1,10 @@
 #!/bin/bash
 
-ESSENTIAL_PACKAGES="build-essential adb fastboot rsync dnsutils stubby man nano gnupg gpgv gcc nasm gdb python-is-python3 stubby curl wget screen minicom git make binutils tcpdump lynx lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar ffmpeg libavcodec-extra sox libsox-fmt-all"
+ESSENTIAL_PACKAGES="build-essential adb fastboot rsync dnsutils stubby man nano gnupg gpgv gcc make cmake nasm gdb python-is-python3 stubby curl wget screen minicom git make binutils tcpdump lynx lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar ffmpeg libavcodec-extra sox libsox-fmt-all"
 
 PACKAGES="gnome-tweaks flatpak vlc spek audacity keepassxc geany putty"
 
-GNOME="apt install --no-install-recommends -y gnome-core && apt install --install-recommends -y $PACKAGES && apt install -y $ESSENTIAL_PACKAGES"
+GNOME="apt install --no-install-recommends -y gnome-core && apt install -y $ESSENTIAL_PACKAGES && apt install --install-recommends -y $PACKAGES"
 
 UNWANTED_PACKAGES="firefox-esr firefox* synaptic smtube qps quassel meteo-qt audacious popularity-contest evolution qbittorrent quodlibet parole exfalso yelp seahorse totem cheese" #malcontent
 UNWANTED_GNOME_DE_PACKAGES="gnome-software gnome-games evolution transmission evolution-data-server gnome-calendar"
