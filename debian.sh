@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ESSENTIAL_PACKAGES="build-essential firmware-linux-nonfree adb fastboot rsync dnsutils stubby man nano gnupg gpgv gcc make cmake nasm gdb python-is-python3 stubby curl wget screen minicom git make binutils tcpdump lynx lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar ffmpeg flac libavcodec-extra sox libsox-fmt-all"
+ESSENTIAL_PACKAGES="build-essential firmware-linux-nonfree adb fastboot rsync screen minicom dnsutils stubby man nano gnupg gpgv gcc make cmake nasm gdb python-is-python3 stubby curl wget git binutils tcpdump lynx lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar ffmpeg flac libavcodec-extra sox libsox-fmt-all"
 
 PACKAGES="gnome-tweaks flatpak vlc spek audacity keepassxc geany putty qbittorrent libreoffice"
 
