@@ -6,9 +6,6 @@ PACKAGES="gnome-tweaks flatpak vlc spek audacity keepassxc geany putty qbittorre
 
 GNOME="apt install --no-install-recommends -y gnome-core && apt install -y $ESSENTIAL_PACKAGES && apt install --install-recommends -y $PACKAGES"
 
-UNWANTED_PACKAGES="firefox-esr firefox* synaptic smtube qps quassel meteo-qt audacious popularity-contest evolution qbittorrent quodlibet parole exfalso yelp seahorse totem cheese" #malcontent
-UNWANTED_GNOME_DE_PACKAGES="gnome-software gnome-games evolution transmission evolution-data-server gnome-calendar"
-
 INTEL_THINGS="intel-microcode iucode-tool *nvidia* firmware-intel* intel-media-va-driver-non-free"
 
 OPENBOX="openbox menu obconf lightdm xfce4-terminal network-manager git kpcli nnn pcmanfm"
