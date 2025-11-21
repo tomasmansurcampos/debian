@@ -172,8 +172,8 @@ net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1
 EOF
-	sysctl -p
- 	sysctl --system
+	/usr/sbin/sysctl -p
+ 	/usr/sbin/sysctl --system
 	systemctl restart procps.service
 	### GRUB
  	cp -v /etc/default/grub /etc/default/grub.bak
