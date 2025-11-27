@@ -470,7 +470,7 @@ chmod 644 /tmp/onlyoffice.gpg
 chown root:root /tmp/onlyoffice.gpg
 mv /tmp/onlyoffice.gpg /usr/share/keyrings/onlyoffice.gpg
 echo 'deb [signed-by=/usr/share/keyrings/onlyoffice.gpg] https://download.onlyoffice.com/repo/debian squeeze main' | tee -a /etc/apt/sources.list.d/onlyoffice.list
-apt update && apt install -y onlyoffice-desktopeditors
+apt update && apt install --install-recommends -y onlyoffice-desktopeditors onlyoffice-desktopeditors-help
 EOF
 	chmod +x /usr/bin/installer-onlyoffice
 	bash /usr/bin/installer-onlyoffice
