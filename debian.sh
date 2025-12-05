@@ -462,6 +462,15 @@ EOF
 	chmod +x /usr/bin/installer-google-chrome
 	bash /usr/bin/installer-google-chrome
 
+	### MULLVAD BROWSER
+	cat <<"EOF" > /usr/bin/installer-mullvad-browser
+curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc https://repository.mullvad.net/deb/mullvad-keyring.asc
+echo "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=amd64] https://repository.mullvad.net/deb/stable stable main" | tee /etc/apt/sources.list.d/mullvad.list
+apt update && apt install -y mullvad-browser
+EOF
+	chmod +x /usr/bin/installer-mullvad-browser
+	bash /usr/bin/installer-mullvad-browser
+
 	### ONLYOFFICE
 	cat <<"EOF" > /usr/bin/installer-onlyoffice
 mkdir -p -m 700 ~/.gnupg
