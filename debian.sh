@@ -2,7 +2,7 @@
 
 ESSENTIAL_PACKAGES="build-essential ca-certificates fonts-noto-color-emoji ttf-mscorefonts-installer firmware-linux-nonfree memtest86+ smartmontools adb fastboot exfatprogs exfat-fuse dosfstools ntfs-3g rsync screen minicom dnsutils nmap stubby ntpsec man nano gnupg gpgv gcc make cmake nasm gdb python3-full python-is-python3 python-dev-is-python3 stubby curl wget git binutils tcpdump tshark lynx lsb-release htop bmon locales-all ascii ipcalc sipcalc rar unrar zip unzip p7zip p7zip-full p7zip-rar ffmpeg flac libavcodec-extra sox libsox-fmt-all"
 
-PACKAGES="gnome-tweaks synaptic flatpak vlc spek audacity ardour keepassxc geany putty qbittorrent libreoffice libreoffice-gnome libreoffice-l10n-es wireshark"
+PACKAGES="gnome-tweaks synaptic flatpak vlc spek audacity ardour yoshimi keepassxc geany putty qbittorrent libreoffice libreoffice-gnome libreoffice-l10n-es wireshark"
 
 GNOME="apt install --no-install-recommends -y gnome-core && apt install -y $ESSENTIAL_PACKAGES && apt install --install-recommends -y $PACKAGES"
 
