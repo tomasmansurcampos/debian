@@ -83,6 +83,7 @@ _flatpak()
 	#flatpak install -y flathub com.warlordsoftwares.youtube-downloader-4ktube
 	flatpak install -y flathub org.nicotine_plus.Nicotine
 	flatpak install -y flathub org.mixxx.Mixxx
+	flatpak install -y flathub com.github.Flacon
 	#flatpak install -y flathub com.bitwig.BitwigStudio
 	#flatpak install -y flathub org.shotcut.Shotcut
 	#flatpak install -y flathub com.github.PintaProject.Pinta
