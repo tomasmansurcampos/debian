@@ -255,7 +255,7 @@ _dnscryptproxy()
     #_set_param "cache_size" "4096"
     _set_param "cache" "false"
     _set_param "block_ipv6" "true"
-    _set_param "force_tcp" "false"
+    _set_param "force_tcp" "true"
     _set_param "odoh_servers" "false"
     _set_param "doh_servers" "true"
     _set_param "dnscrypt_servers" "false"
