@@ -30,11 +30,11 @@ _flatpak()
     flatpak update -y
 
     flatpak install -y flathub com.github.tchx84.Flatseal \
-    		org.keepassxc.KeePassXC \
-    		org.libreoffice.LibreOffice \
+		org.keepassxc.KeePassXC \
+		org.libreoffice.LibreOffice \
 		io.github.ungoogled_software.ungoogled_chromium \
-        us.zoom.Zoom \
-        com.discordapp.Discord \
+		us.zoom.Zoom \
+		com.discordapp.Discord \
         org.telegram.desktop \
         cc.spek.Spek \
         org.nicotine_plus.Nicotine \
@@ -42,7 +42,7 @@ _flatpak()
         com.spotify.Client \
         com.github.Flacon \
         com.vscodium.codium #\
-        #com.play0ad.zeroad \
+		#com.play0ad.zeroad \
         #net.supertuxkart.SuperTuxKart \
         #org.xonotic.Xonotic
 
@@ -424,6 +424,7 @@ Components: contrib
 Architectures: amd64
 Signed-By: /usr/share/keyrings/oracle-virtualbox-2016.gpg
 EOF
+
 	sudo apt update
 	sudo apt install --install-recommends -y virtualbox-7.2 linux-headers-amd64 linux-headers-$(uname -r)
 }
