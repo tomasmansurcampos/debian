@@ -234,6 +234,7 @@ EOF
 
 _dnscryptproxy()
 {
+	# 0. Instalación limpia y respaldo de configuración original.
 	sudo rm -vrf /etc/dnscrypt-proxy/
 
     sudo apt update
