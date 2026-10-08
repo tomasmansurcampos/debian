@@ -396,11 +396,16 @@ _brave()
 ### STEAM
 _steam()
 {
+	# 0. Instalación completa.
 	sudo dpkg --add-architecture i386
 	sudo apt update
 	sudo apt install -y steam-installer
 	sudo apt install -y mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386
 	sudo chown -R $USER:$USER $HOME
+
+	# --- Pasos para borrar Steam completamente. ---
+	#sudo apt purge steam* && sudo apt autoremove --purge && PKGS=$(dpkg --get-selections | grep ':i386' | awk '{print $1}') && [ -n "$PKGS" ] && sudo apt purge --allow-remove-essential $PKGS; sudo apt autoremove --purge && sudo dpkg --remove-architecture i386 && rm -rf ~/.steam ~/.local/share/Steam ~/.config/steam ~/.steampath ~/.steampid
+
 }
 
 _wine_hq()
