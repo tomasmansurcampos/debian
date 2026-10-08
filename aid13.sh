@@ -479,6 +479,45 @@ EOF
 	/usr/local/bin/installer-audacity
 }
 
+_ventoy()
+{
+	cat <<"EOF" | sudo tee /usr/local/bin/installer-ventoy > /dev/null
+#!/bin/bash
+set -e
+
+API_URL="https://api.github.com/repos/ventoy/Ventoy/releases/latest"
+TARGET_DIR="$HOME/.local"
+
+DOWNLOAD_URL=$(curl -s "$API_URL" | grep "browser_download_url.*linux\.tar\.gz" | cut -d '"' -f 4)
+
+if [ -z "$DOWNLOAD_URL" ]; then
+    echo "Error: Fallo en la resolución de la URL de descarga."
+    exit 1
+fi
+
+FILE_NAME=$(basename "$DOWNLOAD_URL")
+DIR_NAME="${FILE_NAME%.tar.gz}"
+FINAL_PATH="$TARGET_DIR/$DIR_NAME"
+TMP_DOWNLOAD="/tmp/$FILE_NAME"
+
+echo "Descargando $FILE_NAME..."
+wget -q --show-progress "$DOWNLOAD_URL" -O "$TMP_DOWNLOAD"
+
+mkdir -p "$TARGET_DIR"
+
+find "$TARGET_DIR" -maxdepth 1 -name "ventoy-*" -type d -exec rm -rf {} +
+
+echo "Descomprimiendo en $TARGET_DIR..."
+tar -xzf "$TMP_DOWNLOAD" -C "$TARGET_DIR"
+
+rm -f "$TMP_DOWNLOAD"
+
+echo "Ejecución finalizada. Ventoy listo en: $FINAL_PATH"
+EOF
+
+	sudo chmod +x /usr/local/bin/installer-ventoy
+}
+
 ### configuracion basica inicial para Debian 13 GNU/Linux.
 _basic_setup()
 {
