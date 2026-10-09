@@ -542,9 +542,6 @@ APT::Install-Recommends "0";
 APT::Install-Suggests "0";
 EOF
 
-	### instalamos dnscrypt-proxy y lo usamos.
-    _dnscryptproxy
-
 	### modificacion del grub.
 	ARCHIVO_GRUB="/etc/default/grub"
 	ARCHIVO_RESPALDO="/etc/default/grub.original"
@@ -567,35 +564,8 @@ net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 EOF
 	sudo sysctl --system
-	
-	### BASIC PACKAGES TO GET LETS START.
-	sudo apt update
-	sudo apt install -y "${ESSENTIAL_PACKAGES[@]}"
-	
-	### bateria tlp
-	sudo apt update
-	sudo apt install -y tlp
-	cat <<EOF | sudo tee /etc/tlp.conf > /dev/null
-START_CHARGE_THRESH_BAT0=40
-STOP_CHARGE_THRESH_BAT0=80
-EOF
-	sudo systemctl enable --now tlp
 
-	### zram.
-	sudo apt update
-	sudo apt install -y zram-tools
-	cat <<EOF | sudo tee /etc/default/zramswap > /dev/null
-ALGO=zstd
-PERCENT=25
-EOF
-
-	### swappiness.
-	cat <<EOF | sudo tee /etc/sysctl.d/99-swappiness.conf > /dev/null
-vm.swappiness=80
-vm.page-cluster=0
-EOF
-
-	### red y kernel seguros.
+### red y kernel seguros.
 	cat <<EOF | sudo tee /etc/sysctl.d/99-security.conf > /dev/null
 kernel.unprivileged_userns_clone = 1	
 
@@ -631,21 +601,23 @@ EOF
 
 	sudo sysctl --system
 
-    ### BEST SOURCES LIST FILES EVER, REALLY. $(lsb_release -cs)
+	### BEST SOURCES LIST FILES EVER, REALLY. $(lsb_release -cs)
 	cat <<EOF | sudo tee /etc/apt/sources.list.d/debian.sources > /dev/null
 Types: deb deb-src
 URIs: https://deb.debian.org/debian/
 Suites: $(lsb_release -cs) $(lsb_release -cs)-updates
 Components: main contrib non-free non-free-firmware
-#Enabled: yes
-Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+Architectures: amd64
+Enabled: yes
+Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
 
 Types: deb deb-src
 URIs: https://security.debian.org/debian-security
 Suites: $(lsb_release -cs)-security
 Components: main contrib non-free non-free-firmware
-#Enabled: yes
-Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+Architectures: amd64
+Enabled: yes
+Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
 EOF
 
     if [ -f /etc/apt/sources.list ]; then
@@ -658,7 +630,16 @@ EOF
     sudo apt clean
     sudo rm -vrf /var/lib/apt/lists/*
     sudo apt clean
-	
+
+    ### Ajustar hora manualmente a UTC antes de hacer sudo apt update por primera vez, y luego instalar systemd-timesyncd para configurar hora automaticamente.
+    HTTP_DATE=$(curl -s --head http://google.com | grep -i '^date:' | sed 's/[Dd]ate: //g' || wget -qS --spider http://google.com 2>&1 | grep -i 'date:' | sed 's/.*[Dd]ate: //g')
+    
+    if [ -n "$HTTP_DATE" ]; then
+        sudo date -u -s "$HTTP_DATE"
+    else
+        sudo hwclock --hctosys --utc
+    fi
+
 	### instalamos y activamos el cliente NTP de systemd.
 	sudo apt update
     sudo apt install -y systemd-timesyncd
@@ -681,6 +662,36 @@ EOF
 	sudo timedatectl set-local-rtc 0
 	sudo timedatectl set-timezone America/Argentina/Buenos_Aires
 	sudo systemctl restart systemd-timesyncd
+
+	### instalamos dnscrypt-proxy y lo usamos.
+    _dnscryptproxy
+	
+	### BASIC PACKAGES TO GET LETS START.
+	sudo apt update
+	sudo apt install -y "${ESSENTIAL_PACKAGES[@]}"
+	
+	### bateria tlp
+	sudo apt update
+	sudo apt install -y tlp
+	cat <<EOF | sudo tee /etc/tlp.conf > /dev/null
+START_CHARGE_THRESH_BAT0=40
+STOP_CHARGE_THRESH_BAT0=80
+EOF
+	sudo systemctl enable --now tlp
+
+	### zram.
+	sudo apt update
+	sudo apt install -y zram-tools
+	cat <<EOF | sudo tee /etc/default/zramswap > /dev/null
+ALGO=zstd
+PERCENT=25
+EOF
+
+	### swappiness.
+	cat <<EOF | sudo tee /etc/sysctl.d/99-swappiness.conf > /dev/null
+vm.swappiness=80
+vm.page-cluster=0
+EOF
 
     cat <<"EOF" | sudo tee /usr/local/bin/installer-fastfetch > /dev/null
 #!/bin/bash
