@@ -12,7 +12,7 @@ ESSENTIAL_PACKAGES=(
 )
 
 PACKAGES=(
-    flatpak vlc foliate audacity mixxx picard geany putty
+    flatpak vlc foliate mixxx picard geany putty
 )
 
 ### instala todo lo que necesito de flatpak.
@@ -76,6 +76,64 @@ _wireshark()
 	sudo chmod 750 /usr/bin/dumpcap
 	sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/dumpcap
 	newgrp wireshark
+}
+
+### ia local con ollama y opencode v2
+_ia()
+{
+    ### --- Local score ---
+    #sudo wget -q --show-progress https://localscore.ai/download/localscore-tiny -O /usr/local/bin/localscore-tiny-1B-2GBmemory
+    #sudo wget -q --show-progress https://localscore.ai/download/localscore-small -O /usr/local/bin/localscore-small-8B-6GBmemory
+    #sudo wget -q --show-progress https://localscore.ai/download/localscore-medium -O /usr/local/bin/localscore-medium-14B-10GBmemory
+    #sudo chmod +x /usr/local/bin/localscore-*
+
+    ### --- OpenCode v2 ---
+    cat <<"EOF" | sudo tee /usr/local/bin/installer-opencode > /dev/null
+#!/bin/bash
+curl -fsSL https://opencode.ai/v2/install | bash
+EOF
+
+    sudo chmod +x /usr/local/bin/installer-opencode
+    /usr/local/bin/installer-opencode
+
+    ### --- Ollama ---
+    cat <<"EOF" | sudo tee /usr/local/bin/installer-ollama > /dev/null
+#!/bin/bash
+curl -fsSL https://ollama.com/install.sh | sh
+EOF
+
+    sudo chmod +x /usr/local/bin/installer-ollama
+    /usr/local/bin/installer-ollama
+    
+    ### --- Configuración Systemd de Ollama ---
+    sudo mkdir -p /etc/systemd/system/ollama.service.d
+    cat <<"EOF" | sudo tee /etc/systemd/system/ollama.service.d/override.conf > /dev/null
+[Service]
+Environment="OLLAMA_NUM_PARALLEL=1"
+Environment="OLLAMA_MAX_LOADED_MODELS=1"
+EOF
+
+    sudo systemctl daemon-reload
+    sudo systemctl restart ollama
+
+	### --- Descarga de modelos base ---
+    ollama pull qwen2.5-coder:7b
+    ollama pull deepseek-r1:8b
+
+	### --- Creación de modelos con contexto optimizado (4096) ---
+    cat <<EOF > /tmp/Modelfile.qwen
+FROM qwen2.5-coder:7b
+PARAMETER num_ctx 4096
+EOF
+    ollama create qwen2.5-coder:7b-4k -f /tmp/Modelfile.qwen
+    rm -f /tmp/Modelfile.qwen
+
+    cat <<EOF > /tmp/Modelfile.deepseek
+FROM deepseek-r1:8b
+PARAMETER num_ctx 4096
+EOF
+    ollama create deepseek-r1:8b-4k -f /tmp/Modelfile.deepseek
+    rm -f /tmp/Modelfile.deepseek
 }
 
 ### --- instala yt-dlp ---
@@ -234,7 +292,7 @@ EOF
 
 _dnscryptproxy()
 {
-	# 0. Instalación limpia y respaldo de configuración original.
+	# 0. Instalación limpia y respaldo de configuracion original.
 	sudo rm -vrf /etc/dnscrypt-proxy/
 
     sudo apt update
@@ -288,6 +346,13 @@ _dnscryptproxy()
     else
         echo "Error crítico: No se detectó conexión activa en NetworkManager."
     fi
+    
+    # Configuración global de NetworkManager para evitar sobreescrituras por DHCP
+    cat <<EOF | sudo tee /etc/NetworkManager/conf.d/dns.conf > /dev/null
+[main]
+dns=none
+EOF
+    sudo systemctl reload NetworkManager
     
     # 4. Blindaje de resolv.conf con opciones de optimización
     sudo /usr/bin/chattr -i /etc/resolv.conf
@@ -387,6 +452,111 @@ EOF
 	/usr/local/bin/installer-nmap
 }
 
+### Se busca y descarga la ultima version del lenguaje Go para Linux amd64.
+_go()
+{
+	### --- GO LANGUAGE para programar en linux amd64 ---
+	cat <<"EOF" | sudo tee /usr/local/bin/installer-go > /dev/null
+#!/bin/bash
+
+# --- Variables globales ---
+ARCH="amd64"
+OS="linux"
+GO_URL_BASE="https://go.dev/dl"
+LATEST_VERSION=$(curl -s 'https://go.dev/VERSION?m=text' | head -n 1)
+FILE="$LATEST_VERSION.$OS-$ARCH.tar.gz"
+URL="$GO_URL_BASE/$FILE"
+TMP_DIR="/tmp"
+
+# --- Buscando si el archivo de Go para linux amd64 existe ---
+if wget --inet4-only --https-only --quiet --spider "$URL"; then
+
+	echo "===> Descargando la versión $LATEST_VERSION de Go"
+    wget --inet4-only --https-only --show-progress "$URL" -O "$TMP_DIR/$FILE"
+    
+    # --- Eliminando versiones instaladas manualmente ---
+    sudo rm -rf /usr/local/go
+    
+    # --- Eliminando Go del repositorio oficial de Debian sin interactividad ---
+    sudo apt purge -y golang-go golang-src golang-doc 2>/dev/null || true
+    sudo apt autoremove -y 2>/dev/null || true
+	
+	# --- Se extrae GO del archivo comprimido ---
+    sudo tar -C /usr/local -xzf "$TMP_DIR/$FILE"
+    rm -f "$TMP_DIR/$FILE"
+	
+	if ! grep -q "/usr/local/go/bin" "$HOME/.bashrc" 2>/dev/null; then
+        echo 'export PATH=$PATH:/usr/local/go/bin' >> "$HOME/.bashrc"
+        echo "Ruta de Go agregada a $HOME/.bashrc con éxito."
+    else
+        echo "La ruta de Go ya está configurada en $HOME/.bashrc"
+    fi
+	echo "Go $LATEST_VERSION installed successfully!"
+else
+	echo "Error $URL not found."
+	exit 1
+fi
+EOF
+	sudo chmod +x /usr/local/bin/installer-go
+	/usr/local/bin/installer-go
+}
+
+###
+_rust()
+{
+	curl --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh
+}
+
+### instala el repositorio oficial de IVPN y descarga el cliente cli + ui.
+_ivpn()
+{
+    ### Añadir la clave GPG de IVPN
+    curl -fsSL https://repo.ivpn.net/stable/debian/generic.gpg | gpg --dearmor > ~/ivpn-archive-keyring.gpg
+
+    sudo mv ~/ivpn-archive-keyring.gpg /usr/share/keyrings/ivpn-archive-keyring.gpg
+
+    ### Establecer permisos apropiados para la clave GPG
+    sudo chown root:root /usr/share/keyrings/ivpn-archive-keyring.gpg
+    sudo chmod 644 /usr/share/keyrings/ivpn-archive-keyring.gpg
+
+    ### Añadir el repositorio IVPN
+    curl -fsSL https://repo.ivpn.net/stable/debian/generic.list | sudo tee /etc/apt/sources.list.d/ivpn.list
+
+    ### Establecer permisos apropiados para el repositorio
+    sudo chown root:root /etc/apt/sources.list.d/ivpn.list
+    sudo chmod 644 /etc/apt/sources.list.d/ivpn.list
+
+    ### Actualizar la información del repositorio de APT
+    sudo apt update
+
+    ### Para instalar el software IVPN (CLI y UI)
+    sudo apt install -y ivpn-ui
+
+    ### Lo desactivamos para darle prioridad a Proton VPN. 
+    sudo systemctl stop ivpn-service.service
+    sudo systemctl disable ivpn-service.service
+}
+
+### Best Free VPN in the world !!!
+_protonvpn()
+{
+    local REPO_URL="https://repo.protonvpn.com/debian/dists/stable/main/binary-all/"
+    
+    local LATEST_DEB=$(curl -sL "$REPO_URL" | grep -oE 'protonvpn-stable-release_[0-9.]+_all\.deb' | sort -V | tail -n 1)
+
+    if [ -z "$LATEST_DEB" ]; then
+        echo "Error: Can not find the latest version of ProtonVPN."
+        return 1
+    fi
+
+    wget "${REPO_URL}${LATEST_DEB}"
+    sudo apt install -y "./${LATEST_DEB}"
+    rm -vf "./${LATEST_DEB}"
+    
+    sudo apt update
+    sudo apt install -y proton-vpn-gnome-desktop gnome-shell-extension-appindicator gnome-shell-extension-prefs
+}
+
 ### Brave Web Browser
 _brave()
 {
@@ -406,6 +576,46 @@ _steam()
 	# --- Pasos para borrar Steam completamente. ---
 	#sudo apt purge steam* && sudo apt autoremove --purge && PKGS=$(dpkg --get-selections | grep ':i386' | awk '{print $1}') && [ -n "$PKGS" ] && sudo apt purge --allow-remove-essential $PKGS; sudo apt autoremove --purge && sudo dpkg --remove-architecture i386 && rm -rf ~/.steam ~/.local/share/Steam ~/.config/steam ~/.steampath ~/.steampid
 
+}
+
+### weechat
+_weechat()
+{
+    sudo mkdir -p /etc/apt/keyrings
+    curl --silent https://weechat.org/dev/info/debian_repository_signing_key_asc/ | sudo tee /etc/apt/keyrings/weechat.asc
+    cat <<EOF | sudo tee /etc/apt/sources.list.d/weechat.sources > /dev/null
+Types: deb
+URIs: https://weechat.org/debian
+Suites: $(lsb_release -cs)
+Components: main
+Architectures: amd64 i386 arm64 armhf
+Signed-By: /etc/apt/keyrings/weechat.asc
+EOF
+    sudo apt update
+    sudo apt install -y weechat-curses weechat-plugins weechat-python weechat-perl
+}
+
+### TOR BROWSER
+_tor_browser()
+{
+	cat <<"EOF" | sudo tee /usr/local/bin/installer-tor-browser > /dev/null
+#!/bin/bash
+LINK="https://www.torproject.org"
+TOR_BROWSER_LINK=$(curl -s "$LINK"/download/ | grep -oP 'href="/dist/torbrowser/[^"]*"' | grep 'linux-x86_64' | sed 's/href="\///' | sed 's/"//' | head -n 1)
+URL="$LINK"/"$TOR_BROWSER_LINK"
+FILE=$(basename "$URL")
+if wget --inet4-only --https-only --quiet --spider "$URL"; then
+    wget --inet4-only --https-only --show-progress -q "$URL" -O "$FILE"
+    tar xf "$FILE"
+    mv -v tor-browser/ ~/.local/
+    rm -vf "$FILE"
+else
+    echo "Error $URL not found."
+fi
+EOF
+
+    sudo chmod +x /usr/local/bin/installer-tor-browser
+    /usr/local/bin/installer-tor-browser
 }
 
 _wine_hq()
@@ -434,6 +644,27 @@ EOF
 
 	sudo apt update
 	sudo apt install --install-recommends -y virtualbox-7.2 linux-headers-amd64 linux-headers-$(uname -r)
+}
+
+### cliente tor.
+_tor()
+{
+	sudo apt update
+	sudo apt install -y wget gnupg
+	
+	cat <<EOF | sudo tee /etc/apt/sources.list.d/tor.sources > /dev/null
+Types: deb
+URIs: https://deb.torproject.org/torproject.org/
+Suites: $(lsb_release -cs)
+Components: main
+Architectures: $(dpkg --print-architecture)
+Signed-By: /usr/share/keyrings/deb.torproject.org-keyring.gpg
+EOF
+	wget -qO- https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --dearmor | sudo tee /usr/share/keyrings/deb.torproject.org-keyring.gpg >/dev/null
+	sudo apt update
+	sudo apt install -y tor deb.torproject.org-keyring
+    sudo systemctl stop tor
+    sudo systemctl disable tor
 }
 
 _audacity()
@@ -517,6 +748,7 @@ EOF
 
 	sudo chmod +x /usr/local/bin/installer-ventoy
 }
+
 
 ### configuracion basica inicial para Debian 13 GNU/Linux.
 _basic_setup()
@@ -705,13 +937,20 @@ rm -vf ./fastfetch-linux-amd64.deb
 EOF
 	sudo chmod +x /usr/local/bin/installer-fastfetch
 	/usr/local/bin/installer-fastfetch
-	
-	#sudo apt update
-	#sudo apt install --no-install-recommends gnome-core
-  
-    _nmap
-  
+
+    #_ia
+    
+    #_go
+    
+    #_rust
+    
+    #_nmap
+    
+    #_tor
+    
     _ytdlp
+    
+    #_ventoy
 
 }
 
@@ -721,30 +960,36 @@ _debian_desktop()
 	### OFFICIAL DEBIAN PACKAGES
 	sudo apt update
     sudo apt install --install-recommends -y "${PACKAGES[@]}"
-    
+
     _audacity
-    
+
     _visual_studio_code
-    
+
     _wireshark
 
     ### Liquorix kernel, ideal for gaming, a/v live production.
     #curl -s 'https://liquorix.net/install-liquorix.sh' | sudo bash
+    
+    #_ivpn
 
+    #_protonvpn
+    
     #_steam
 
-    _brave
+    #_weechat
+
+    #_brave
 
     #_tor_browser
-    
+
     #_virtual_box_7.2
-    
+
     _sox_ng
-    
+
     _flatpak
-    
+
     #_wired_for_war
-    
+
     _ffmpeg_master_latest
 
     #_wine_hq
@@ -753,7 +998,7 @@ _debian_desktop()
 _cookie_fortune()
 {
 	## https://stackoverflow.com/questions/414164/how-can-i-select-random-files-from-a-directory-in-bash
-  sudo apt update
+	sudo apt update
     sudo apt install -y cowsay fortunes
 	cat <<"EOF" | sudo tee /usr/local/bin/cookie-fortune > /dev/null
 #!/bin/bash
