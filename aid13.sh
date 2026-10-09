@@ -75,7 +75,7 @@ _wireshark()
 	sudo chgrp wireshark /usr/bin/dumpcap
 	sudo chmod 750 /usr/bin/dumpcap
 	sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/dumpcap
-	newgrp wireshark
+	#newgrp wireshark
 }
 
 ### ia local con ollama y opencode v2
