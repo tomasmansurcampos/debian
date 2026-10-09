@@ -997,10 +997,10 @@ _debian_desktop()
 
 _cookie_fortune()
 {
-	## https://stackoverflow.com/questions/414164/how-can-i-select-random-files-from-a-directory-in-bash
-	sudo apt update
-    sudo apt install -y cowsay fortunes
-	cat <<"EOF" | sudo tee /usr/local/bin/cookie-fortune > /dev/null
+    ## https://stackoverflow.com/questions/414164/how-can-i-select-random-files-from-a-directory-in-bash
+    sudo apt update
+    sudo apt install -y cowsay fortune-mod fortunes
+    cat <<"EOF" | sudo tee /usr/local/bin/cookie-fortune > /dev/null
 #!/bin/bash
 COWS=(/usr/share/cowsay/cows/*.cow)
 CHARACTER_PATH="${COWS[RANDOM % ${#COWS[@]}]}"
@@ -1008,7 +1008,7 @@ CHARACTER=$(basename "$CHARACTER_PATH" .cow)
 fortune -s | cowsay -f "$CHARACTER"
 EOF
 
-	sudo rm -vf /usr/share/applications/fortune.desktop
+    sudo rm -vf /usr/share/applications/fortune.desktop
     sudo chmod 755 /usr/local/bin/cookie-fortune
     /usr/local/bin/cookie-fortune
 }
