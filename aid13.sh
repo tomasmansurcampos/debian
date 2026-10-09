@@ -963,7 +963,7 @@ _debian_desktop()
 
     _audacity
 
-    _visual_studio_code
+    #_visual_studio_code
 
     _wireshark
 
