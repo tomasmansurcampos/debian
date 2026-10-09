@@ -631,6 +631,10 @@ EOF
     sudo rm -vrf /var/lib/apt/lists/*
     sudo apt clean
 
+	### Remover software no deseado de fábrica
+    sudo apt remove -y gnome-software libreoffice-base-core libreoffice-common
+    sudo apt autoremove -y
+
     ### Ajustar hora manualmente a UTC antes de hacer sudo apt update por primera vez, y luego instalar systemd-timesyncd para configurar hora automaticamente.
     HTTP_DATE=$(curl -s --head http://google.com | grep -i '^date:' | sed 's/[Dd]ate: //g' || wget -qS --spider http://google.com 2>&1 | grep -i 'date:' | sed 's/.*[Dd]ate: //g')
     
