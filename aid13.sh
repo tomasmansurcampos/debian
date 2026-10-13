@@ -968,7 +968,7 @@ _debian_desktop()
     _wireshark
 
     ### Liquorix kernel, ideal for gaming, a/v live production.
-    #curl -s 'https://liquorix.net/install-liquorix.sh' | sudo bash
+    curl -s 'https://liquorix.net/install-liquorix.sh' | sudo bash
     
     #_ivpn
 
