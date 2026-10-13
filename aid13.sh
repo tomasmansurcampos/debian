@@ -12,7 +12,7 @@ ESSENTIAL_PACKAGES=(
 )
 
 PACKAGES=(
-    flatpak vlc foliate mixxx picard geany putty
+    flatpak vlc foliate mixxx picard geany putty strawberry
 )
 
 ### instala todo lo que necesito de flatpak.
