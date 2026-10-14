@@ -8,7 +8,7 @@ ESSENTIAL_PACKAGES=(
     nano man gcc make cmake nasm gdb rust-all nodejs npm golang python3-full python-is-python3 
     python-dev-is-python3 curl wget socat dnsutils wireguard openvpn git binutils tcpdump lynx lsb-release 
     htop bmon locales-all ascii ipcalc 7zip 7zip-rar rar unrar zip unzip ffmpeg flac libavcodec-extra imagemagick
-    postgresql-17 tlp
+    postgresql-17 tlp scrot
 )
 
 PACKAGES=(
