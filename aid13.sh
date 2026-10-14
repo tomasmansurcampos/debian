@@ -986,7 +986,9 @@ EOF
     #_tor
     
     _ytdlp
-    
+
+	_sqlmap
+
     #_ventoy
 
 }
