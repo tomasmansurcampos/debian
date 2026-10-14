@@ -786,6 +786,19 @@ EOF
 	sudo chmod +x /usr/local/bin/installer-ventoy
 }
 
+_capturas()
+{
+    sudo apt update
+    sudo apt install -y scrot
+    mkdir -vp "$HOME/Imágenes/Capturas de pantalla"
+    
+    cat << 'EOF' | sudo tee /usr/local/bin/capturas > /dev/null
+#!/bin/bash
+scrot '%Y-%m-%d-%H%M%S_pantalla.png' -e 'mv "$f" "$HOME/Imágenes/Capturas de pantalla/"'
+EOF
+
+    sudo chmod +x /usr/local/bin/capturas
+}
 
 ### configuracion basica inicial para Debian 13 GNU/Linux.
 _basic_setup()
@@ -990,6 +1003,8 @@ EOF
 	_sqlmap
 
     #_ventoy
+
+	_capturas
 
 }
 
