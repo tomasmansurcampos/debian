@@ -52,6 +52,21 @@ _flatpak()
     flatpak update -y
 }
 
+_google_chrome()
+{
+    local tmp_deb="/tmp/google-chrome-stable_current_amd64.deb"
+
+    echo "Descargando Google Chrome..."
+    if wget --quiet --show-progress --https-only --inet4-only -O "$tmp_deb" https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; then
+        echo "Instalando Google Chrome..."
+        sudo apt install -y "$tmp_deb"
+        rm -v "$tmp_deb"
+    else
+        echo "Error: Falló la descarga de Google Chrome." >&2
+        return 1
+    fi
+}
+
 _visual_studio_code()
 {
 	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft.gpg
@@ -960,6 +975,8 @@ _debian_desktop()
 	### OFFICIAL DEBIAN PACKAGES
 	sudo apt update
     sudo apt install --install-recommends -y "${PACKAGES[@]}"
+
+	_google_chrome
 
     _audacity
 
