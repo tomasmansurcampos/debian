@@ -162,6 +162,28 @@ _ytdlp()
     sudo ln -vsf "${bin_dir}/yt-dlp" /usr/local/bin/yt-dlp
 }
 
+### --- sqlmap ---
+_sqlmap()
+{
+    local target_dir="${HOME}/.local/share/sqlmap-dev"
+    local bin_dir="${HOME}/.local/bin"
+    local tmp_dir="/tmp/sqlmap-dev"
+
+    rm -rf "${tmp_dir}"
+
+    if git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git "${tmp_dir}"; then
+        rm -rf "${target_dir}"
+        mv "${tmp_dir}" "${target_dir}"
+        mkdir -p "${bin_dir}"
+        ln -sf "${target_dir}/sqlmap.py" "${bin_dir}/sqlmap"
+        chmod +x "${target_dir}/sqlmap.py"
+        echo "sqlmap actualizado correctamente."
+    else
+        echo "Error: Falló la descarga del repositorio." >&2
+        return 1
+    fi
+}
+
 ### --- instala el mejor fork del videojuego clasico "Machines: Wired for War" de Acclaim ---
 _wired_for_war()
 {
