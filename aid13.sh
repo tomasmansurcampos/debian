@@ -154,6 +154,7 @@ EOF
 ### --- instala yt-dlp ---
 _ytdlp()
 {
+	curl -fsSL https://deno.land/install.sh | sh
 	sudo apt remove -y yt-dlp
     local bin_dir="${HOME}/.local/bin"
     mkdir -vp "${bin_dir}"
