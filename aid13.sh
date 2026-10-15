@@ -8,7 +8,7 @@ ESSENTIAL_PACKAGES=(
     nano man gcc make cmake nasm gdb rust-all nodejs npm golang python3-full python-is-python3 
     python-dev-is-python3 curl wget socat dnsutils wireguard openvpn git binutils tcpdump lynx lsb-release 
     htop bmon locales-all ascii ipcalc 7zip 7zip-rar rar unrar zip unzip ffmpeg flac libavcodec-extra imagemagick
-    postgresql-17 tlp scrot
+    postgresql-17 tlp
 )
 
 PACKAGES=(
@@ -789,12 +789,13 @@ EOF
 _capturas()
 {
     sudo apt update
-    sudo apt install -y scrot
+    sudo apt install -y scrot xclip
     mkdir -vp "$HOME/Imágenes/Capturas de pantalla"
-    
-    cat << 'EOF' | sudo tee /usr/local/bin/capturas > /dev/null
+
+    cat << "EOF" | sudo tee /usr/local/bin/capturas > /dev/null
 #!/bin/bash
-scrot '%Y-%m-%d-%H%M%S_pantalla.png' -e 'mv "$f" "$HOME/Imágenes/Capturas de pantalla/"'
+ARCHIVO="$HOME/Imágenes/Capturas de pantalla/$(date +'%Y-%m-%d-%H%M%S_pantalla.png')"
+scrot "$ARCHIVO" -e 'xclip -selection clipboard -t image/png < "$f"'
 EOF
 
     sudo chmod +x /usr/local/bin/capturas
