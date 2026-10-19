@@ -997,7 +997,11 @@ EOF
 	### BASIC PACKAGES TO GET LETS START.
 	sudo apt update
 	sudo apt install -y "${ESSENTIAL_PACKAGES[@]}"
-	
+	# Desactivar inicio automático en el arranque del sistema
+	sudo systemctl disable docker.service docker.socket postgresql redis-server
+	# Detener los servicios inmediatamente si ya están corriendo
+	sudo systemctl stop docker.service docker.socket postgresql redis-server
+
 	### bateria tlp
 	sudo apt update
 	sudo apt install -y tlp
