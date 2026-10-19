@@ -3,12 +3,52 @@
 set -euo pipefail
 
 ESSENTIAL_PACKAGES=(
-    build-essential ca-certificates gpg rsync fonts-noto-color-emoji ttf-mscorefonts-installer 
-    firmware-linux-nonfree memtest86+ smartmontools adb fastboot zbar-tools screen minicom 
-    nano man gcc make cmake nasm gdb rust-all nodejs npm golang python3-full python-is-python3 
-    python-dev-is-python3 curl wget socat dnsutils wireguard openvpn git binutils tcpdump lynx lsb-release 
-    htop bmon locales-all ascii ipcalc 7zip 7zip-rar rar unrar zip unzip ffmpeg flac libavcodec-extra imagemagick
-    postgresql-17 tlp
+    # Compilación, Toolchains C/C++ y Build Systems
+    build-essential gcc g++ make cmake ninja-build autoconf automake pkg-config binutils
+
+    # Ensamblador, Depuración y LLVM
+    nasm yasm gdb lldb llvm clang
+
+    # Control de Versiones, Búsqueda y Descargas
+    git git-lfs curl wget jq ripgrep fd-find rsync
+
+    # Python: Entorno Base, Desarrollo y Web Scraping
+    python3-full python3-pip python3-venv python3-dev python-is-python3 python-dev-is-python3
+    python3-requests python3-bs4 python3-lxml python3-scrapy python3-httpx python3-selenium python3-urllib3
+
+    # Cabeceras C/C++ y Criptografía para Desarrollo
+    libxml2-dev libxslt1-dev libffi-dev libssl-dev zlib1g-dev libsqlite3-dev
+
+    # Java OpenJDK y Build Tools
+    default-jdk openjdk-21-jdk maven gradle
+
+    # Lenguajes y Ecosistemas: Node.js, Go y Rust
+    nodejs npm golang rust-all cargo rustc
+
+    # Navegadores y Web Drivers (Scraping Dinámico y QA)
+    chromium chromium-driver firefox-esr
+
+    # Bases de Datos y Motores de Almacenamiento
+    postgresql-17 postgresql-client sqlite3 redis-server
+
+    # Redes, Diagnóstico y VPN
+    dnsutils ipcalc socat tcpdump wireguard openvpn
+
+    # Sistema, Hardware, Móviles y Gestión Térmica/Energía
+    firmware-linux-nonfree memtest86+ smartmontools tlp adb fastboot
+
+    # Monitoreo, Multiplexores y Utilidades de Terminal
+    htop bmon tmux screen tree minicom nano man zbar-tools lynx ascii
+
+    # Archivos, Compresión y Sistema de Archivos
+    tar zip unzip 7zip 7zip-rar rar unrar
+
+    # Contenedores y Virtualización
+    docker.io docker-compose
+
+    # Multimedia, Fuentes y Sistema Base
+    ffmpeg flac libavcodec-extra imagemagick
+    ca-certificates gpg fonts-noto-color-emoji ttf-mscorefonts-installer locales-all lsb-release
 )
 
 PACKAGES=(
