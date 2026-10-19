@@ -405,7 +405,7 @@ _dnscryptproxy()
     _set_param "http3" "false"
     _set_param "require_nofilter" "true"
     _set_param "require_nolog" "true"
-    _set_param "require_dnssec" "true"
+    _set_param "require_dnssec" "false"
     
     # 2. Actualización a listas v3
     if ! grep -q "v3/public-resolvers.md" "$CONF"; then
