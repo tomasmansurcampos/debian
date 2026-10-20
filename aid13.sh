@@ -15,9 +15,10 @@ ESSENTIAL_PACKAGES=(
     # Python: Entorno Base, Desarrollo y Web Scraping
     python3-full python3-pip python3-venv python3-dev python-is-python3 python-dev-is-python3
     python3-requests python3-bs4 python3-lxml python3-scrapy python3-httpx python3-selenium python3-urllib3
+    python3-scapy
 
     # Cabeceras C/C++ y Criptografía para Desarrollo
-    libxml2-dev libxslt1-dev libffi-dev libssl-dev zlib1g-dev libsqlite3-dev
+    libxml2-dev libxslt1-dev libffi-dev libssl-dev zlib1g-dev libsqlite3-dev libpcap-dev
 
     # Java OpenJDK y Build Tools
     default-jdk openjdk-21-jdk maven gradle
