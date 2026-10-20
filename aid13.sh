@@ -21,7 +21,7 @@ ESSENTIAL_PACKAGES=(
     libxml2-dev libxslt1-dev libffi-dev libssl-dev zlib1g-dev libsqlite3-dev libpcap-dev
 
     # Java OpenJDK y Build Tools
-    default-jdk openjdk-25-jdk maven gradle
+    default-jdk openjdk-21-jdk openjdk-25-jdk maven gradle
 
     # Lenguajes y Ecosistemas: Node.js, Go y Rust
     nodejs npm golang rust-all cargo rustc
