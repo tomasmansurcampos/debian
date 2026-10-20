@@ -26,6 +26,9 @@ ESSENTIAL_PACKAGES=(
     # Lenguajes y Ecosistemas: Node.js, Go y Rust
     nodejs npm golang rust-all cargo rustc
 
+	# Servidores Web, PHP y Desarrollo Backend Local
+    php-cli php-curl php-mbstring php-xml php-sqlite3 php-pgsql nginx
+
     # Navegadores y Web Drivers (Scraping Dinámico y QA)
     chromium chromium-driver firefox-esr
 
@@ -999,10 +1002,11 @@ EOF
 	### BASIC PACKAGES TO GET LETS START.
 	sudo apt update
 	sudo apt install -y "${ESSENTIAL_PACKAGES[@]}"
+
 	# Desactivar inicio automático en el arranque del sistema
-	sudo systemctl disable docker.service docker.socket postgresql redis-server
+	sudo systemctl disable --now docker.service docker.socket postgresql redis-server nginx
 	# Detener los servicios inmediatamente si ya están corriendo
-	sudo systemctl stop docker.service docker.socket postgresql redis-server
+	sudo systemctl stop docker.service docker.socket postgresql redis-server nginx
 
 	### bateria tlp
 	sudo apt update
