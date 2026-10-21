@@ -409,7 +409,7 @@ _dnscryptproxy()
     _set_param "http3" "false"
     _set_param "require_nofilter" "true"
     _set_param "require_nolog" "true"
-    _set_param "require_dnssec" "false"
+    _set_param "require_dnssec" "true"
     
     # 2. Actualización a listas v3
     if ! grep -q "v3/public-resolvers.md" "$CONF"; then
@@ -880,7 +880,7 @@ EOF
 	HARDENING="ipv6.disable=1 init_on_alloc=1 init_on_free=1 slab_nomerge page_alloc.shuffle=1 randomize_kstack_offset=on intel_iommu=on iommu=pt"
 	GRUB_CMDLINE_LINUX_DEFAULT="$ORIGINAL_CMDLINE $HARDENING"
 	sudo tee /etc/default/grub.d/99-hardening.cfg > /dev/null <<EOF
-GRUB_TIMEOUT=2
+GRUB_TIMEOUT=5
 GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT"
 GRUB_DISABLE_OS_PROBER=true
 EOF
