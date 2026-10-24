@@ -683,17 +683,32 @@ _tor_browser()
 {
 	cat <<"EOF" | sudo tee /usr/local/bin/installer-tor-browser > /dev/null
 #!/bin/bash
-LINK="https://www.torproject.org"
-TOR_BROWSER_LINK=$(curl -s "$LINK"/download/ | grep -oP 'href="/dist/torbrowser/[^"]*"' | grep 'linux-x86_64' | sed 's/href="\///' | sed 's/"//' | head -n 1)
-URL="$LINK"/"$TOR_BROWSER_LINK"
-FILE=$(basename "$URL")
-if wget --inet4-only --https-only --quiet --spider "$URL"; then
-    wget --inet4-only --https-only --show-progress -q "$URL" -O "$FILE"
-    tar xf "$FILE"
+
+BASE_URL="https://dist.torproject.org/torbrowser"
+
+echo "Buscando la última versión estable de Tor Browser..."
+
+LATEST_VERSION=$(curl -s "${BASE_URL}/" | grep -Eo 'href="[0-9]+\.[0-9]+\.[0-9]+/"' | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1)
+
+if [ -z "$LATEST_VERSION" ]; then
+    echo "Error: No se pudo determinar la última versión desde $BASE_URL."
+    exit 1
+fi
+
+echo "Última versión estable encontrada: $LATEST_VERSION"
+
+FILE_NAME="tor-browser-linux-x86_64-${LATEST_VERSION}.tar.xz"
+DOWNLOAD_URL="${BASE_URL}/${LATEST_VERSION}/${FILE_NAME}"
+
+echo "Descargando Tor Browser ($FILE_NAME)..."
+if wget --inet4-only --https-only --quiet --spider "$DOWNLOAD_URL"; then
+    wget --inet4-only --https-only --show-progress -q "$DOWNLOAD_URL" -O "$FILE_NAME"
+    tar xf "$FILE_NAME"
     mv -v tor-browser/ ~/.local/
-    rm -vf "$FILE"
+    rm -vf "$FILE_NAME"
+	echo "¡Descarga completada con éxito!"
 else
-    echo "Error $URL not found."
+    echo "Error $DOWNLOAD_URL not found."
 fi
 EOF
 
