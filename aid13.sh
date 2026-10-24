@@ -30,7 +30,7 @@ ESSENTIAL_PACKAGES=(
     php-cli php-curl php-mbstring php-xml php-sqlite3 php-pgsql nginx
 
     # Navegadores y Web Drivers (Scraping Dinámico y QA)
-    chromium chromium-driver firefox-esr
+    chromium chromium-shell chromium-driver firefox-esr
 
     # Bases de Datos y Motores de Almacenamiento
     postgresql-17 postgresql-client sqlite3 redis-server
