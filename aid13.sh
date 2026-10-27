@@ -902,7 +902,7 @@ MENU_OPTIONS=(
     "setup_hora_argentina" "Configurar NTP a hora Argentina" OFF
     "setup_basic_packages" "Instalar ESSENTIAL_PACKAGES" ON
     "setup_bateria_tlp" "Configurar batería con TLP" OFF
-    "setup_zram_and_swap" "Configurar ZRAM y Swap" OFF
+    "setup_zram_and_swap" "Configurar ZRAM y Swap" ON
     "github_fastfetch" "Instalar Fastfetch" ON
     "dnscryptproxy" "Instalar y configurar DNSCrypt" ON
     "ia" "Instalar IA Local y Ollama" OFF
