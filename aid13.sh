@@ -4,7 +4,7 @@ set -euo pipefail
 
 ESSENTIAL_PACKAGES=(
     # Compilación, Toolchains C/C++ y Build Systems
-    build-essential gcc g++ make cmake ninja-build autoconf automake pkg-config binutils dkms
+    build-essential gcc g++ make cmake ninja-build autoconf automake pkg-config binutils linux-headers-$(uname -r) dkms
 
     # Ensamblador, Depuración y LLVM
     nasm yasm gdb lldb llvm clang
