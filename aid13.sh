@@ -749,6 +749,9 @@ EOF
 
 	sudo apt update
 	sudo apt install --install-recommends -y virtualbox-7.2 linux-headers-amd64 linux-headers-$(uname -r)
+
+	echo -e "blacklist kvm\nblacklist kvm_intel\nblacklist kvm_amd" | sudo tee /etc/modprobe.d/kvm-blacklist.conf
+	sudo modprobe -r kvm_intel kvm_amd kvm
 }
 
 ### cliente tor.
