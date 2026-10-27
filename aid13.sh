@@ -170,29 +170,34 @@ EOF
 [Service]
 Environment="OLLAMA_NUM_PARALLEL=1"
 Environment="OLLAMA_MAX_LOADED_MODELS=1"
+Environment="OLLAMA_FLASH_ATTENTION=1"
+Environment="OLLAMA_KEEP_ALIVE=5m"
 EOF
 
     sudo systemctl daemon-reload
     sudo systemctl restart ollama
 
-	### --- Descarga de modelos base ---
-    ollama pull qwen2.5-coder:7b
-    ollama pull deepseek-r1:8b
+    ### --- Descarga de modelos base ---
+    local modelos=(
+        "qwen2.5-coder:7b"
+        "deepseek-r1:8b"
+        "gemma4:e2b"
+        "gemma4:e4b"
+    )
 
-	### --- Creación de modelos con contexto optimizado (4096) ---
-    cat <<EOF > /tmp/Modelfile.qwen
-FROM qwen2.5-coder:7b
+    for modelo in "${modelos[@]}"; do
+        ollama pull "$modelo"
+    done
+
+    ### --- Creación de modelos con contexto optimizado (4096) ---
+    for modelo in "${modelos[@]}"; do
+        cat <<EOF > /tmp/Modelfile.opt
+FROM $modelo
 PARAMETER num_ctx 4096
 EOF
-    ollama create qwen2.5-coder:7b-4k -f /tmp/Modelfile.qwen
-    rm -f /tmp/Modelfile.qwen
-
-    cat <<EOF > /tmp/Modelfile.deepseek
-FROM deepseek-r1:8b
-PARAMETER num_ctx 4096
-EOF
-    ollama create deepseek-r1:8b-4k -f /tmp/Modelfile.deepseek
-    rm -f /tmp/Modelfile.deepseek
+        ollama create "${modelo}-4k" -f /tmp/Modelfile.opt
+    done
+    rm -f /tmp/Modelfile.opt
 }
 
 ### --- instala yt-dlp ---
