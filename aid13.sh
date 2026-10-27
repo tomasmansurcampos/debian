@@ -862,9 +862,11 @@ _github_fastfetch()
 {
     cat <<"EOF" | sudo tee /usr/local/bin/installer-fastfetch > /dev/null
 #!/bin/bash
-wget "https://github.com/fastfetch-cli/fastfetch/releases/download/$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | jq -r .tag_name)/fastfetch-linux-amd64.deb"
+cd /tmp
+wget -q --show-progress "https://github.com/fastfetch-cli/fastfetch/releases/download/$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | jq -r .tag_name)/fastfetch-linux-amd64.deb"
 sudo apt install -y ./fastfetch-linux-amd64.deb
 rm -vf ./fastfetch-linux-amd64.deb
+cd - > /dev/null
 EOF
     sudo chmod +x /usr/local/bin/installer-fastfetch
     /usr/local/bin/installer-fastfetch
