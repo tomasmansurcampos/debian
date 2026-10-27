@@ -183,6 +183,8 @@ EOF
         "deepseek-r1:8b"
         "gemma4:e2b"
         "gemma4:e4b"
+		"granite4.2:3b"
+		"granite4.2:8b"
     )
 
     for modelo in "${modelos[@]}"; do
