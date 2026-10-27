@@ -363,22 +363,25 @@ _dnscryptproxy()
 
     sudo systemctl restart dnscrypt-proxy.socket dnscrypt-proxy.service
     
-    local ACTIVE_CONN
-    ACTIVE_CONN=$(nmcli -t -f NAME connection show --active | head -n 1)
-    if [ -n "$ACTIVE_CONN" ]; then
-        sudo nmcli connection modify "$ACTIVE_CONN" ipv4.dns "127.0.2.1"
-        sudo nmcli connection modify "$ACTIVE_CONN" ipv4.ignore-auto-dns yes
-        sudo nmcli connection modify "$ACTIVE_CONN" ipv6.method "disabled"
-        sudo nmcli connection up "$ACTIVE_CONN"
-    else
-        echo "Error crítico: No se detectó conexión activa en NetworkManager."
-    fi
-    
-    cat <<EOF | sudo tee /etc/NetworkManager/conf.d/dns.conf > /dev/null
+    if command -v nmcli &> /dev/null; then
+        local ACTIVE_CONN
+        ACTIVE_CONN=$(nmcli -t -f NAME connection show --active | head -n 1)
+        if [ -n "$ACTIVE_CONN" ]; then
+            sudo nmcli connection modify "$ACTIVE_CONN" ipv4.dns "127.0.2.1"
+            sudo nmcli connection modify "$ACTIVE_CONN" ipv4.ignore-auto-dns yes
+            sudo nmcli connection modify "$ACTIVE_CONN" ipv6.method "disabled"
+            sudo nmcli connection up "$ACTIVE_CONN"
+        fi
+        
+        sudo mkdir -p /etc/NetworkManager/conf.d
+        cat <<EOF | sudo tee /etc/NetworkManager/conf.d/dns.conf > /dev/null
 [main]
 dns=none
 EOF
-    sudo systemctl reload NetworkManager
+        sudo systemctl reload NetworkManager || true
+    else
+        echo "Aviso: NetworkManager no está instalado. Saltando configuración de nmcli."
+    fi
     sudo /usr/bin/chattr -i /etc/resolv.conf
     cat <<"EOF" | sudo tee /etc/resolv.conf > /dev/null
 nameserver 127.0.2.1
