@@ -910,8 +910,8 @@ MENU_OPTIONS=(
     "rust" "Instalar Rust" OFF
     "nmap" "Compilar e instalar Nmap" OFF
     "tor" "Instalar daemon Tor base" OFF
-    "ytdlp" "Instalar yt-dlp" OFF
-    "sqlmap" "Instalar sqlmap" OFF
+    "ytdlp" "Instalar yt-dlp" ON
+    "sqlmap" "Instalar sqlmap" ON
     "ventoy" "Instalar Ventoy" OFF
     "capturas" "Script Scrot (Capturas)" OFF
     "setup_desktop_packages" "Instalar paquetes de Escritorio" OFF
@@ -930,7 +930,7 @@ MENU_OPTIONS=(
     "sox_ng" "Compilar e instalar sox_ng" OFF
     "flatpak" "Instalar Flatpak y Flathubs" OFF
     "wired_for_war" "Instalar Machines: Wired for War" OFF
-    "ffmpeg_master_latest" "Instalar FFmpeg Master" OFF
+    "ffmpeg_master_latest" "Instalar FFmpeg Master" ON
     "wine_hq" "Instalar WineHQ" OFF
     "cookie_fortune" "Instalar y ejecutar Cookie Fortune" ON
 )
