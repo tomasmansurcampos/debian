@@ -471,7 +471,12 @@ EOF
 
 _rust()
 {
-    curl --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh
+    cat <<"EOF" | sudo tee /usr/local/bin/installer-rust > /dev/null
+#!/bin/sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+EOF
+    sudo chmod +x /usr/local/bin/installer-rust
+    /usr/local/bin/installer-rust
 }
 
 _ivpn()
