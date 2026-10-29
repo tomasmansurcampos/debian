@@ -532,6 +532,33 @@ EOF
     sudo apt install -y weechat-curses weechat-plugins weechat-python weechat-perl
 }
 
+_debian_tor()
+{
+    # Actualizar e instalar Tor
+    sudo apt update
+    sudo DEBIAN_FRONTEND=noninteractive apt install -y tor
+    
+    # Detener y enmascarar el servicio por defecto
+    sudo systemctl stop tor.service
+    sudo systemctl mask tor.service
+
+    # Crear script para levantar Tor
+    cat <<"EOF" | sudo tee /usr/local/bin/levantar-tor.sh > /dev/null
+#!/bin/bash
+sudo systemctl unmask tor.service
+sudo systemctl start tor.service
+EOF
+    sudo chmod +x /usr/local/bin/levantar-tor.sh
+
+    # Crear script para apagar Tor
+    cat <<"EOF" | sudo tee /usr/local/bin/apagar-tor.sh > /dev/null
+#!/bin/bash
+sudo systemctl stop tor.service
+sudo systemctl mask tor.service
+EOF
+    sudo chmod +x /usr/local/bin/apagar-tor.sh
+}
+
 _tor_browser()
 {
     cat <<"EOF" | sudo tee /usr/local/bin/installer-tor-browser > /dev/null
@@ -905,6 +932,7 @@ MENU_OPTIONS=(
     "setup_zram_and_swap" "Configurar ZRAM y Swap" ON
     "github_fastfetch" "Instalar Fastfetch" ON
     "dnscryptproxy" "Instalar y configurar DNSCrypt" ON
+    "debian_tor" "Instala el paquete tor" ON
     "ia" "Instalar IA Local y Ollama" OFF
     "go" "Instalar lenguaje Go" OFF
     "rust" "Instalar Rust" OFF
@@ -965,6 +993,7 @@ for choice in $CHOICES; do
         setup_zram_and_swap) _setup_zram_and_swap ;;
         github_fastfetch) _github_fastfetch ;;
         dnscryptproxy) _dnscryptproxy ;;
+        debian_tor) _debian_tor ;;
         ia) _ia ;;
         go) _go ;;
         rust) _rust ;;
