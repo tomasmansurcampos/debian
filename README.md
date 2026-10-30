@@ -1,4 +1,4 @@
-# Debian 13 GNU/Linux Post-Install Automation (`aid13`)
+# Debian 13 GNU/Linux Post-Install Automation
 
 Script en Bash para la automatización de la configuración posinstalación de **Debian 13 (Trixie) GNU/Linux** en arquitectura `amd64`. Optimizado para el despliegue rápido tanto en **Servidores Privados Virtuales (VPS)** como en **computadoras de escritorio y laptops (PC)**.
 
