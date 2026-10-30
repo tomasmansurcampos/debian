@@ -562,6 +562,24 @@ sudo systemctl stop tor.service
 sudo systemctl mask tor.service
 EOF
     sudo chmod +x /usr/local/bin/apagar-tor.sh
+
+    #Servicio systemd para asegurar apagado de Tor en cada arranque
+    cat <<"EOF" | sudo tee /etc/systemd/system/desactivar-tor-boot.service > /dev/null
+[Unit]
+Description=Garantizar que Tor este detenido y enmascarado al iniciar el sistema
+Before=network-pre.target network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/apagar-tor.sh
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    # Recargar systemd y habilitar el servicio al arranque
+    sudo systemctl daemon-reload
+    sudo systemctl enable desactivar-tor-boot.service
 }
 
 _tor_browser()
