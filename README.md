@@ -14,7 +14,7 @@ Script en Bash para la automatización de la configuración posinstalación de *
 ## Requisitos
 
 - Debian 13 GNU/Linux (Trixie) `amd64`.
-- Usuario con privilegios `sudo` o acceso directo como `root`.
+- Usuario con privilegios `sudo`.
 - Conexión a Internet activa.
 
 ## Instalación y Ejecución
