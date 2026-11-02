@@ -380,4 +380,3 @@ Su diseño permite seleccionar solamente los componentes necesarios, combinar di
 
 **Script principal:** [aid13.sh](https://github.com/tomasmansurcampos/debian/blob/main/aid13.sh)
 
-**Licencia:** consultar el repositorio.
