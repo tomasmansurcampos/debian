@@ -56,7 +56,7 @@ Configuraciones orientadas a reforzar determinados parámetros de seguridad del 
 - Inicialización y liberación de memoria.
 - Aleatorización de estructuras de memoria.
 - Configuración de Intel IOMMU.
-- Deshabilitación de OS Prober.
+- Habilitación de OS Prober.
 
 **Hardening del kernel y la red mediante sysctl:**
 - Restricciones sobre BPF no privilegiado.
