@@ -922,6 +922,16 @@ EOF
     /usr/local/bin/installer-fastfetch
 }
 
+_microsoft_pwsh()
+{
+    source /etc/os-release
+    wget -q https://packages.microsoft.com/config/debian/$VERSION_ID/packages-microsoft-prod.deb
+    sudo apt install -y ./packages-microsoft-prod.deb
+    rm -v ./packages-microsoft-prod.deb
+    sudo apt update
+    sudo apt install -y powershell
+}
+
 _cookie_fortune()
 {
     sudo apt update
@@ -956,6 +966,7 @@ MENU_OPTIONS=(
     "github_fastfetch" "Instalar Fastfetch" ON
     "dnscryptproxy" "Instalar y configurar DNSCrypt" ON
     "debian_tor" "Instala el paquete tor" ON
+    "_microsoft_pwsh" "Instala Microsoft Power Shell" ON
     "ia" "Instalar IA Local y Ollama" OFF
     "go" "Instalar lenguaje Go" OFF
     "rust" "Instalar Rust" OFF
@@ -1017,6 +1028,7 @@ for choice in $CHOICES; do
         github_fastfetch) _github_fastfetch ;;
         dnscryptproxy) _dnscryptproxy ;;
         debian_tor) _debian_tor ;;
+        microsoft_pwsh) _microsoft_pwsh ;;
         ia) _ia ;;
         go) _go ;;
         rust) _rust ;;
