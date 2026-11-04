@@ -34,7 +34,7 @@ ESSENTIAL_PACKAGES=(
     default-jdk openjdk-21-jdk openjdk-25-jdk maven gradle
 
     # Lenguajes y Ecosistemas: Node.js, Go y Rust
-    nodejs npm golang rust-all cargo rustc
+    nodejs npm rust-all cargo rustc
 
     # Servidores Web, PHP y Desarrollo Backend Local
     php-cli php-curl php-mbstring php-xml php-sqlite3 php-pgsql nginx
@@ -932,6 +932,61 @@ _microsoft_pwsh()
     sudo apt install -y powershell
 }
 
+_latest_official_go()
+{
+    echo "[*] Verificando dependencias..."
+    
+    if ! command -v curl >/dev/null 2>&1; then
+        sudo apt-get update && sudo apt-get install -y curl
+    fi
+
+    # Verificar si 'go' está disponible; si no, instala el de Debian como base
+    if ! command -v go >/dev/null 2>&1; then
+        echo "[*] Comando 'go' no encontrado. Instalando golang-go de los repositorios..."
+        sudo apt-get update && sudo apt-get install -y golang-go
+    fi
+
+    echo "[*] Consultando la última versión en go.dev..."
+    # LATEST_VERSION devuelve el formato "go1.XX.Y"
+    local LATEST_VERSION
+    LATEST_VERSION=$(curl -s 'https://go.dev/VERSION?m=text' | head -n 1)
+
+    if [[ -z "$LATEST_VERSION" ]]; then
+        echo "[-] Error: No se pudo obtener la versión."
+        return 1
+    fi
+    echo "[*] Versión detectada: $LATEST_VERSION"
+
+    # Limpiar versiones previas en sdk y los binarios wrapper antiguos
+    echo "[*] Limpiando directorios ~/sdk y ~/go/bin..."
+    mkdir -p "$HOME/sdk" "$HOME/go/bin"
+    rm -rf "$HOME/sdk/go"*
+    rm -f "$HOME/go/bin/go1."*
+
+    # Instalar el wrapper y ejecutar la descarga del SDK oficial
+    # Como LATEST_VERSION ya incluye la palabra "go", la concatenación es directa
+    echo "[*] Instalando el wrapper y descargando el toolchain oficial..."
+    go install "golang.org/dl/${LATEST_VERSION}@latest"
+    "$HOME/go/bin/$LATEST_VERSION" download
+
+    echo "[*] Configurando el PATH en ~/.bashrc..."
+    local BASHRC="$HOME/.bashrc"
+
+    # 1. Eliminar líneas antiguas del SDK de Go en ~/.bashrc para evitar duplicados en el PATH
+    sed -i '\|export PATH=$HOME/sdk/go.*/bin:$PATH|d' "$BASHRC"
+
+    # 2. Agregar la nueva ruta del SDK al inicio del PATH
+    echo "export PATH=\$HOME/sdk/$LATEST_VERSION/bin:\$PATH" >> "$BASHRC"
+
+    # 3. Validar si ~/go/bin ya está exportado; si no, agregarlo al final del PATH
+    if ! grep -Fq 'export PATH=$PATH:$HOME/go/bin' "$BASHRC"; then
+        echo 'export PATH=$PATH:$HOME/go/bin' >> "$BASHRC"
+    fi
+
+    echo "[+] Instalación y configuración completadas."
+    echo "[+] Ejecuta 'source ~/.bashrc' o cierra y abre la terminal para aplicar el PATH."
+}
+
 _cookie_fortune()
 {
     sudo apt update
@@ -966,7 +1021,8 @@ MENU_OPTIONS=(
     "github_fastfetch" "Instalar Fastfetch" ON
     "dnscryptproxy" "Instalar y configurar DNSCrypt" ON
     "debian_tor" "Instala el paquete tor" ON
-    "_microsoft_pwsh" "Instala Microsoft Power Shell" ON
+    "microsoft_pwsh" "Instala Microsoft Power Shell" ON
+    "latest_official_go" "Instala Go latest oficial" ON
     "ia" "Instalar IA Local y Ollama" OFF
     "go" "Instalar lenguaje Go" OFF
     "rust" "Instalar Rust" OFF
@@ -1029,6 +1085,7 @@ for choice in $CHOICES; do
         dnscryptproxy) _dnscryptproxy ;;
         debian_tor) _debian_tor ;;
         microsoft_pwsh) _microsoft_pwsh ;;
+        latest_official_go) _latest_official_go ;;
         ia) _ia ;;
         go) _go ;;
         rust) _rust ;;
