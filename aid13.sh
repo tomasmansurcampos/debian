@@ -34,7 +34,7 @@ ESSENTIAL_PACKAGES=(
     default-jdk openjdk-21-jdk openjdk-25-jdk maven gradle
 
     # Lenguajes y Ecosistemas: Node.js, Go y Rust
-    nodejs npm rust-all cargo rustc
+    nodejs npm golang rust-all cargo rustc
 
     # Servidores Web, PHP y Desarrollo Backend Local
     php-cli php-curl php-mbstring php-xml php-sqlite3 php-pgsql nginx
