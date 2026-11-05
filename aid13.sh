@@ -437,38 +437,6 @@ EOF
     /usr/local/bin/installer-nmap
 }
 
-_go()
-{
-    cat <<"EOF" | sudo tee /usr/local/bin/installer-go > /dev/null
-#!/bin/bash
-ARCH="amd64"
-OS="linux"
-GO_URL_BASE="https://go.dev/dl"
-LATEST_VERSION=$(curl -s 'https://go.dev/VERSION?m=text' | head -n 1)
-FILE="$LATEST_VERSION.$OS-$ARCH.tar.gz"
-URL="$GO_URL_BASE/$FILE"
-TMP_DIR="/tmp"
-
-if wget --inet4-only --https-only --quiet --spider "$URL"; then
-    wget --inet4-only --https-only --show-progress "$URL" -O "$TMP_DIR/$FILE"
-    sudo rm -rf /usr/local/go
-    sudo apt purge -y golang-go golang-src golang-doc 2>/dev/null || true
-    sudo apt autoremove -y 2>/dev/null || true
-    sudo tar -C /usr/local -xzf "$TMP_DIR/$FILE"
-    rm -f "$TMP_DIR/$FILE"
-    
-    if ! grep -q "/usr/local/go/bin" "$HOME/.bashrc" 2>/dev/null; then
-        echo 'export PATH=$PATH:/usr/local/go/bin' >> "$HOME/.bashrc"
-    fi
-    echo "Go $LATEST_VERSION installed successfully!"
-else
-    exit 1
-fi
-EOF
-    sudo chmod +x /usr/local/bin/installer-go
-    /usr/local/bin/installer-go
-}
-
 _rust()
 {
     cat <<"EOF" | sudo tee /usr/local/bin/installer-rust > /dev/null
