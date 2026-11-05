@@ -46,7 +46,7 @@ ESSENTIAL_PACKAGES=(
     postgresql-17 postgresql-client sqlite3 redis-server
 
     # Redes, Diagnóstico y VPN
-    dnsutils ipcalc socat tcpdump wireguard openvpn conntrack
+    dnsutils ipcalc socat tcpdump wireguard openvpn network-manager-openvpn conntrack
 
     # Sistema, Hardware, Móviles y Gestión Térmica/Energía
     firmware-linux-nonfree memtest86+ smartmontools tlp adb fastboot
